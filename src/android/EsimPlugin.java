@@ -33,6 +33,6 @@ public class EsimPlugin extends CordovaPlugin {
   private void hasEsimEnabled() {
     EuiccManager mgr = (EuiccManager) context.getSystemService(Context.EUICC_SERVICE);
     boolean result = mgr.isEnabled();
-    callbackContext.sendPluginResult(new PluginResult(Status.OK, result));
+    callback.sendPluginResult(new PluginResult(Status.OK, result));
   }
 }
