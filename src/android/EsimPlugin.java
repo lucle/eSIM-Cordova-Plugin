@@ -14,12 +14,13 @@ import org.json.JSONObject;
 public class EsimPlugin extends CordovaPlugin {
 
   private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
+  private CallbackContext callback;
 
-
-  private static final String DURATION_LONG = "long";
   @Override
   public boolean execute(String action, JSONArray args,
     final CallbackContext callbackContext) throws JSONException {
+
+    callback = callbackContext;
 
     if (HAS_ESIM_ENABLED.equals(action)) {
       hasEsimEnabled();
@@ -31,6 +32,7 @@ public class EsimPlugin extends CordovaPlugin {
 
   private void hasEsimEnabled() {
     EuiccManager mgr = (EuiccManager) context.getSystemService(Context.EUICC_SERVICE);
-    this.callback.sendPluginResult(new PluginResult(PluginResult.Status.OK, mgr.isEnabled()));
+    boolean result = mgr.isEnabled();
+    callbackContext.sendPluginResult(new PluginResult(Status.OK, result));
   }
 }
