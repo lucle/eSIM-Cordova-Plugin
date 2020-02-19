@@ -12,17 +12,17 @@
         <engine name="cordova" version=">=3.0.0"/>
     </engines>
 
-    <js-module src="www/esimplugin.js" name="Esim">
+    <js-module src="www/esimplugin.js" name="EsimPlugin">
         <merges target="window.plugins.esimplugin" />
     </js-module>
     
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="EsimPlugin">
-                <param name="android-package" value="com.dreamcloud.esim"/>
+                <param name="android-package" value="com.dreamcloud.EsimPlugin"/>
             </feature>
         </config-file>
 
-        <source-file src="src/android/EsimPlugin.java" target-dir="src/com/dreamcloud/cordova/plugin" />
+        <source-file src="src/android/EsimPlugin.java" target-dir="src/com/dreamcloud" />
     </platform>
 </plugin>

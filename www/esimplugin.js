@@ -1,5 +1,5 @@
 module.exports = {
   hasEsimEnabled: function(successCallback, errorCallback) {
-    cordova.exec(successCallback, errorCallback, 'Esim', 'hasEsimEnabled', []);
+    cordova.exec(successCallback, errorCallback, 'EsimPlugin', 'hasEsimEnabled', []);
   }
 };

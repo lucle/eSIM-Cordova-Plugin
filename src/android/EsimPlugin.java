@@ -1,4 +1,4 @@
-package com.dreamcloud.cordova.plugin;
+package com.dreamcloud;
 
 // The native android API
 import android.telephony.euicc.EuiccManager;
@@ -33,9 +33,13 @@ public class EsimPlugin extends CordovaPlugin {
   }
 
   private void hasEsimEnabled() {
-    Context context = this.cordova.getActivity().getApplicationContext();
-    EuiccManager mgr = (EuiccManager) context.getSystemService(Context.EUICC_SERVICE);
-    boolean result = mgr.isEnabled();
-    callback.sendPluginResult(new PluginResult(Status.OK, result));
+    try {
+      Context context = this.cordova.getActivity().getApplicationContext();
+      EuiccManager mgr = (EuiccManager) context.getSystemService(Context.EUICC_SERVICE);
+      boolean result = mgr.isEnabled();
+      callback.sendPluginResult(new PluginResult(Status.OK, result));
+    } catch (Exception e) {
+      callback.sendPluginResult(new PluginResult(Status.OK, false));
+    }
   }
 }
