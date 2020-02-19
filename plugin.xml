@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-esim" version="0.0.1">
-    <name>ToastyPlugin</name>
+    <name>EsimPlugin</name>
 
     <description>An Android Cordova plugin that checks is esim is supported</description>
     <license>MIT</license>
