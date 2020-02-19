@@ -1,7 +1,7 @@
 package com.dreamcloud.cordova.plugin;
 
 // The native android API
-import android.telephony.euicc.EuiccManager
+import android.telephony.euicc.EuiccManager;
 
 // Cordova-required packages
 import org.apache.cordova.CallbackContext;
