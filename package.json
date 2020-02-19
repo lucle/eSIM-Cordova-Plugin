@@ -1,0 +1,28 @@
+{
+  "name": "cordova-plugin-esimplugin",
+  "version": "0.0.1",
+  "description": "An Android Cordova plugin that checks if esim is supported",
+  "cordova": {
+    "id": "cordova-plugin-esimplugin",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://xueli_goh@bitbucket.org/xueli_goh/esim.git"
+  },
+  "keywords": [
+    "cordova-android",
+    "esim",
+    "cordova-plugin-esimplugin"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "author": "Goh Xue Li <xueli@dreamcloud.com.sg>",
+  "license": "MIT"
+}

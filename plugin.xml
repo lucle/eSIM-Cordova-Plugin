@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-esim" version="0.0.1">
+    <name>ToastyPlugin</name>
+
+    <description>An Android Cordova plugin that checks is esim is supported</description>
+    <license>MIT</license>
+	<repo>https://xueli_goh@bitbucket.org/xueli_goh/esim.git</repo>
+  
+    <engines>
+        <engine name="cordova" version=">=3.0.0"/>
+    </engines>
+
+    <js-module src="www/esimplugin.js" name="Esim">
+        <merges target="window.plugins.esimplugin" />
+    </js-module>
+    
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="EsimPlugin">
+                <param name="android-package" value="com.dreamcloud.esim"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/esim.java" target-dir="src/com/dreamcloud/cordova/plugin" />
+    </platform>
+</plugin>
