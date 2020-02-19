@@ -6,7 +6,7 @@
 
     <description>An Android Cordova plugin that checks is esim is supported</description>
     <license>MIT</license>
-	<repo>https://xueli_goh@bitbucket.org/xueli_goh/esim.git</repo>
+    <repo>https://xueli_goh@bitbucket.org/xueli_goh/esim.git</repo>
   
     <engines>
         <engine name="cordova" version=">=3.0.0"/>
@@ -32,6 +32,7 @@
                 <param name="ios-package" value="EsimPlugin"/>
             </feature>
         </config-file>
-        <source-file src="src/ios/EsimPlugin.swift" />
+        <source-file src="src/ios/EsimPlugin.h" />
+        <source-file src="src/ios/EsimPlugin.m" />
     </platform>
 </plugin>
