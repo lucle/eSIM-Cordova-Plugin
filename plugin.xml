@@ -23,6 +23,6 @@
             </feature>
         </config-file>
 
-        <source-file src="src/android/esim.java" target-dir="src/com/dreamcloud/cordova/plugin" />
+        <source-file src="src/android/EsimPlugin.java" target-dir="src/com/dreamcloud/cordova/plugin" />
     </platform>
 </plugin>
