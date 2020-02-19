@@ -25,4 +25,13 @@
 
         <source-file src="src/android/EsimPlugin.java" target-dir="src/com/dreamcloud" />
     </platform>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="EsimPlugin">
+                <param name="ios-package" value="EsimPlugin"/>
+            </feature>
+        </config-file>
+        <source-file src="src/ios/EsimPlugin.swift" />
+    </platform>
 </plugin>
