@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://xueli_goh@bitbucket.org/xueli_goh/esim.git"
+    "url": "git+https://xueli_goh@bitbucket.org/xueli_goh/esim-cordova-plugin.git"
   },
   "keywords": [
     "cordova-android",
