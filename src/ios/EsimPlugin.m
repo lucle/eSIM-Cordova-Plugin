@@ -17,5 +17,27 @@
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
 }
+- (BOOL)hasEsimInstalled:(CDVInvokedUrlCommand*)command
+{
+        BOOL result = NO;
+        CTCellularPlanProvisioningRequest *ctpr = [[CTCellularPlanProvisioningRequest alloc] init];
+        ctpr.address = @"Your eSIM profile address";
+        ctpr.matchingID = @"Confirmation id";
 
+        if (@available(iOS 12, *)) {
+            CTCellularPlanProvisioning *ctcp = [[CTCellularPlanProvisioning alloc] init];
+            [ctcp addPlanWith:ctpr completionHandler:^(CTCellularPlanProvisioningAddPlanResult result) {
+                switch (result) {
+                    case CTCellularPlanProvisioningAddPlanResultSuccess:
+                        result = YES;
+                        break;
+                    default:
+                        result = NO;
+                        break;
+                }
+            }];
+        }
+        return result;
+    }
+}
 @end
