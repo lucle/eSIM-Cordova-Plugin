@@ -17,6 +17,7 @@
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
 }
+
 - (BOOL)installEsim:(CDVInvokedUrlCommand*)command
 {
         BOOL result = NO;
@@ -31,15 +32,15 @@
             [ctcp addPlanWith:ctpr completionHandler:^(CTCellularPlanProvisioningAddPlanResult result) {
                 switch (result) {
                     case CTCellularPlanProvisioningAddPlanResultSuccess:
-                        result = YES;
+                        result = YES; //eSIM installed successfully
                         break;
                     default:
-                        result = NO;
+                        result = NO; //something went wrong
                         break;
                 }
             }];
         }
         return result;
 }
-}
+
 @end
