@@ -18,7 +18,7 @@
     }
 }
 
-- (BOOL)installEsim:(CDVInvokedUrlCommand*)command
+- (void)installEsim:(CDVInvokedUrlCommand*)command
 {
         BOOL result = NO;
         CTCellularPlanProvisioningRequest *ctpr = [[CTCellularPlanProvisioningRequest alloc] init];
@@ -33,14 +33,20 @@
                 switch (result) {
                     case CTCellularPlanProvisioningAddPlanResultSuccess:
                         result = YES; //eSIM installed successfully
+                        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:result];
+                        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
                         break;
                     default:
                         result = NO; //something went wrong
+                        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:result];
+                        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
                         break;
                 }
             }];
+        } else {
+             CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         }
-        return result;
 }
 
 @end

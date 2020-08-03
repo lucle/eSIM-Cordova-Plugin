@@ -3,5 +3,5 @@
 @interface EsimPlugin : CDVPlugin
 
 - (void)hasEsimEnabled:(CDVInvokedUrlCommand*)command;
-- (BOOL)installEsim:(CDVInvokedUrlCommand*)command;
+- (void)installEsim:(CDVInvokedUrlCommand*)command;
 @end
