@@ -22,10 +22,10 @@
 {
         BOOL result = NO;
         CTCellularPlanProvisioningRequest *ctpr = [[CTCellularPlanProvisioningRequest alloc] init];
-        ctpr.address = getArg(command.arguments[0]);
-        ctpr.matchingID = getArg(command.arguments[1]);
-        ctpr.iccid = getArg(command.arguments[2]);
-        ctpr.confirmationCode = getArg(command.arguments[3]);
+        ctpr.address = [command argumentAtIndex:0 withDefault:nil]; 
+        ctpr.matchingID = [command argumentAtIndex:1 withDefault:nil]; 
+        ctpr.iccid = [command argumentAtIndex:2 withDefault:nil]; 
+        ctpr.confirmationCode = [command argumentAtIndex:3 withDefault:nil]; 
 
         if (@available(iOS 12, *)) {
             CTCellularPlanProvisioning *ctcp = [[CTCellularPlanProvisioning alloc] init];
