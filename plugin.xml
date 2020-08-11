@@ -32,6 +32,14 @@
                 <param name="ios-package" value="EsimPlugin"/>
             </feature>
         </config-file>
+        
+        <config-file target="*/Entitlements-Debug.plist" parent="com.apple.CommCenter.fine-grained">
+            <true/>
+        </config-file>
+
+        <config-file target="*/Entitlements-Release.plist" parent="com.apple.CommCenter.fine-grained">
+            <true/>
+        </config-file>
         <source-file src="src/ios/EsimPlugin.h" />
         <source-file src="src/ios/EsimPlugin.m" />
     </platform>
