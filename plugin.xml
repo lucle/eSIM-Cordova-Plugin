@@ -32,7 +32,21 @@
                 <param name="ios-package" value="EsimPlugin"/>
             </feature>
         </config-file>
-        
+
+        <config-file target="*-Info.plist" parent="CarrierDescriptors">
+            <array>
+                <dict>
+                    <key>GID1</key>
+                    <string></string>
+                    <key>GID2</key>
+                    <string></string>
+                    <key>MCC</key>
+                    <string>525</string>
+                    <key>MNC</key>
+                    <string>05</string>
+                </dict>
+            </array>
+        </config-file>
         
         <config-file target="*/Entitlements-Debug.plist" parent="com.apple.security.network.server">
             <true/>
@@ -46,21 +60,6 @@
             <string>public-cellular-plan</string>
         </config-file>
 
-        <config-file target="*/Entitlements-Debug.plist" parent="CarrierDescriptors">
-            <array>
-                <dict>
-                    <key>GID1</key>
-                    <string></string>
-                    <key>GID2</key>
-                    <string></string>
-                    <key>MCC</key>
-                    <string>525</string>
-                    <key>MNC</key>
-                    <string>05</string>
-                </dict>
-            </array>
-        </config-file>
-
 
         <config-file target="*/Entitlements-Release.plist" parent="com.apple.security.network.server">
             <true/>
@@ -72,21 +71,6 @@
 
         <config-file target="*/Entitlements-Release.plist" parent="com.apple.CommCenter.fine-grained">
             <string>public-cellular-plan</string>
-        </config-file>
-
-        <config-file target="*/Entitlements-Release.plist" parent="CarrierDescriptors">
-            <array>
-                <dict>
-                    <key>GID1</key>
-                    <string></string>
-                    <key>GID2</key>
-                    <string></string>
-                    <key>MCC</key>
-                    <string>525</string>
-                    <key>MNC</key>
-                    <string>05</string>
-                </dict>
-            </array>
         </config-file>
 
         <source-file src="src/ios/EsimPlugin.h" />
