@@ -7,7 +7,7 @@
     <description>An Android Cordova plugin that checks is esim is supported</description>
     <license>MIT</license>
     <repo>https://xueli_goh@bitbucket.org/xueli_goh/esim.git</repo>
-  
+
     <engines>
         <engine name="cordova" version=">=3.0.0"/>
     </engines>
@@ -15,7 +15,7 @@
     <js-module src="www/esimplugin.js" name="EsimPlugin">
         <merges target="window.plugins.esimplugin" />
     </js-module>
-    
+
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="EsimPlugin">
@@ -48,41 +48,48 @@
             </array>
         </config-file>
 
-        <config-file target="*-Info.plist" parent="IccidPrefix">
-            <string>896505</string>
-        </config-file>
-
-        <config-file target="*-Info.plist" parent="LSRequiresIPhoneOS">
+        <config-file target="*-Info.plist" parent="com.apple.security.network.server">
             <true/>
         </config-file>
 
-        <config-file target="*-Info.plist" parent="SmdpUrl">
-            <string>shb.prod.ondemandconnectivity.com</string>
-        </config-file>
-        
-        <config-file target="*/Entitlements-Debug.plist" parent="com.apple.security.network.server">
+        <config-file target="*-Info.plist" parent="com.apple.security.network.client">
             <true/>
         </config-file>
-        
-        <config-file target="*/Entitlements-Debug.plist" parent="com.apple.security.network.client">
-            <true/>
+
+        <config-file target="*-Info.plist" parent="com.apple.CommCenter.fine-grained">
+            <array>
+                <string>spi</string>
+                <string>sim-authentication</string>
+                <string>identity</string>
+            </array>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="com.apple.wlan.authentication">
+            <true />
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="keychain-access-groups">
+            <array>
+                <string>apple</string>
+                <string>com.apple.identities</string>
+                <string>com.apple.certificates</string>
+            </array>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="com.apple.private.system-keychain">
+            <true />
         </config-file>
 
         <config-file target="*/Entitlements-Debug.plist" parent="com.apple.CommCenter.fine-grained">
-            <string>public-cellular-plan</string>
-        </config-file>
-
-
-        <config-file target="*/Entitlements-Release.plist" parent="com.apple.security.network.server">
-            <true/>
-        </config-file>
-        
-        <config-file target="*/Entitlements-Release.plist" parent="com.apple.security.network.client">
-            <true/>
+            <array>
+                <string>public-cellular-plan</string>
+            </array>
         </config-file>
 
         <config-file target="*/Entitlements-Release.plist" parent="com.apple.CommCenter.fine-grained">
-            <string>public-cellular-plan</string>
+            <array>
+                <string>public-cellular-plan</string>
+            </array>
         </config-file>
 
         <source-file src="src/ios/EsimPlugin.h" />
