@@ -24,7 +24,7 @@
         ctpr.address = [command argumentAtIndex:0 withDefault:nil]; 
         ctpr.matchingID = [command argumentAtIndex:1 withDefault:nil]; 
         ctpr.ICCID = [command argumentAtIndex:2 withDefault:nil]; 
-        ctpr.confirmationCode = [command argumentAtIndex:3 withDefault:nil]; 
+        //ctpr.confirmationCode = [command argumentAtIndex:3 withDefault:nil];
 
         if (@available(iOS 12, *)) {
             CTCellularPlanProvisioning *ctcp = [[CTCellularPlanProvisioning alloc] init];
