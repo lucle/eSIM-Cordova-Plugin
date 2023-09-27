@@ -44,7 +44,7 @@ public class EsimPlugin extends CordovaPlugin {
         boolean result = mgr.isEnabled();
         callback.sendPluginResult(new PluginResult(Status.OK, result));
     }
-    private void installEsim(String SDMPAddress, String activationCode) {
+    private void installEsim(String SDMPAddress, String activationCode) throws JSONException{
         // Register receiver.
         String action = "download_subscription";
         String LPA_DECLARED_PERMISSION = SDMPAddress;
