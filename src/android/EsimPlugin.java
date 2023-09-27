@@ -9,14 +9,15 @@ import android.content.IntentFilter;
 import android.app.PendingIntent;
 // Cordova-required packages
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
 import org.apache.cordova.PluginResult.Status;
-import org.apache.cordova.CordovaInterface;
-import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 public class EsimPlugin extends CordovaPlugin {
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
     Context mainContext;
@@ -53,7 +54,7 @@ public class EsimPlugin extends CordovaPlugin {
                         if (!action.equals(intent.getAction())) {
                             return;
                         }
-                        String resultCode = getResultCode();
+                        int resultCode = getResultCode();
                         String detailedCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, 0);
 
                         // If the result code is a resolvable error, call startResolutionActivity
