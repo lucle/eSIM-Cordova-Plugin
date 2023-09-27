@@ -31,8 +31,8 @@ public class EsimPlugin extends CordovaPlugin {
     }
     private void installEsim(String SDMPAddress, String activationCode) {
         // Register receiver.
-        static final String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
-        static final String LPA_DECLARED_PERMISSION = SDMPAddress;
+        String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
+        String LPA_DECLARED_PERMISSION = SDMPAddress;
         BroadcastReceiver receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
