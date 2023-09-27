@@ -29,7 +29,7 @@ public class EsimPlugin extends CordovaPlugin {
         boolean result = mgr.isEnabled();
         callback.sendPluginResult(new PluginResult(Status.OK, result));
     }
-    private void installEsim(String activationCode, String SDMPAddress) {
+    private void installEsim(String SDMPAddress, String activationCode) {
         // Register receiver.
         static final String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
         static final String LPA_DECLARED_PERMISSION = SDMPAddress;
