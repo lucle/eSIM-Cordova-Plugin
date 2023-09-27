@@ -31,24 +31,33 @@ public class EsimPlugin extends CordovaPlugin {
     }
     private void installEsim(String SDMPAddress, String activationCode) {
         // Register receiver.
-        String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
+        Context context = this.cordova.getActivity().getApplicationContext();
+        EuiccManager mgr = (EuiccManager) context.getSystemService(Context.EUICC_SERVICE);
+        String action = "download_subscription";
         String LPA_DECLARED_PERMISSION = SDMPAddress;
         BroadcastReceiver receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (!action.equals(intent.getAction())) {
-                    return;
-                }
-                resultCode = getResultCode();
-                detailedCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, 0 /* defaultValue*/ );
-                resultIntent = intent;
-            }
-        };
-        context.registerReceiver(receiver, new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), LPA_DECLARED_PERMISSION , null /* handler */ );
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        if (!action.equals(intent.getAction())) {
+                            return;
+                        }
+                        resultCode = getResultCode();
+                        detailedCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, 0);
+
+                        // If the result code is a resolvable error, call startResolutionActivity
+                        if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR) {
+                            PendingIntent callbackIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+                            mgr.startResolutionActivity(activity, 0, intent, callbackIntent);
+                        }
+                        resultIntent = intent;
+                    }
+                };
+        context.registerReceiver(receiver, new IntentFilter(action), LPA_DECLARED_PERMISSION, null);
+
         // Download subscription asynchronously.
-        DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode /* encodedActivationCode*/ );
+        DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode);
         Intent intent = new Intent(action);
-        PendingIntent callbackIntent = PendingIntent.getBroadcast(getContext(), 0 /* requestCode */ , intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mgr.downloadSubscription(sub, true /* switchAfterDownload */ , callbackIntent);
+        PendingIntent callbackIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+        mgr.downloadSubscription(sub, true, callbackIntent);
     }
 }
