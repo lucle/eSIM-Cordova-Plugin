@@ -55,23 +55,23 @@ public class EsimPlugin extends CordovaPlugin {
                             return;
                         }
                         int resultCode = getResultCode();
-                        String detailedCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, 0);
+                        int detailedCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, 0);
 
                         // If the result code is a resolvable error, call startResolutionActivity
                         if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR) {
                             PendingIntent callbackIntent = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
-                            mgr.startResolutionActivity(this.cordova.getActivity(), 0, intent, callbackIntent);
+                            mgr.startResolutionActivity(cordova.getActivity(), 0, intent, callbackIntent);
                         }
-                        String resultIntent = intent;
+                        Intent resultIntent = intent;
                     }
                 };
-        context.registerReceiver(receiver, new IntentFilter(action), LPA_DECLARED_PERMISSION, null);
+        mainContext.registerReceiver(receiver, new IntentFilter(action), LPA_DECLARED_PERMISSION, null);
 
         // Download subscription asynchronously.
         DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode);
         Intent intent = new Intent(action);
         PendingIntent callbackIntent = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         mgr.downloadSubscription(sub, true, callbackIntent);
-        callback.sendPluginResult(new PluginResult(Status.OK));
+        callback.sendPluginResult(new PluginResult(Status.OK, "success");
     }       
 }
