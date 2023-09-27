@@ -72,6 +72,6 @@ public class EsimPlugin extends CordovaPlugin {
         Intent intent = new Intent(action);
         PendingIntent callbackIntent = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         mgr.downloadSubscription(sub, true, callbackIntent);
-        callback.sendPluginResult(new PluginResult(Status.OK, "success");
+        callback.sendPluginResult(new PluginResult(Status.OK, "success"));
     }       
 }
