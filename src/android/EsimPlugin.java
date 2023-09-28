@@ -83,11 +83,11 @@ public class EsimPlugin extends CordovaPlugin {
                             Intent resultIntent = intent;
                         }
                     };
-            mainContext.registerReceiver(receiver, new IntentFilter(ACTION_SWITCH_TO_SUBSCRIPTION), LPA_DECLARED_PERMISSION, null);
+            mainContext.registerReceiver(receiver, new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), LPA_DECLARED_PERMISSION, null);
 
             // Download subscription asynchronously.
             DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode);
-            Intent intent = new Intent(ACTION_SWITCH_TO_SUBSCRIPTION);
+            Intent intent = new Intent(ACTION_DOWNLOAD_SUBSCRIPTION);
             PendingIntent callbackIntent = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
             mgr.downloadSubscription(sub, true, callbackIntent);
             callbackContext.success();
