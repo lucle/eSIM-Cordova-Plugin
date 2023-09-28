@@ -43,6 +43,7 @@ public class EsimPlugin extends CordovaPlugin {
             String iccid = args.getString(2);
             String confirmationCode = args.getString(3);
             installEsim(address, activationCode, iccid, confirmationCode);
+            return true;
         } else {
             return false;
         }
