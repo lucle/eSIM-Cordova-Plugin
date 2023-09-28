@@ -44,10 +44,10 @@ public class EsimPlugin extends CordovaPlugin {
         boolean result = mgr.isEnabled();
         callback.sendPluginResult(new PluginResult(Status.OK, result));
     }
-    private void installEsim(String SDMPAddress, String activationCode){
+    private void installEsim(String address, String activationCode, String iccid, String confirmationCode) throws JSONException{
         // Register receiver.
         String action = "download_subscription";
-        String LPA_DECLARED_PERMISSION = SDMPAddress;
+        String LPA_DECLARED_PERMISSION = address;
         BroadcastReceiver receiver = new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
@@ -62,7 +62,8 @@ public class EsimPlugin extends CordovaPlugin {
                             try {
                                 PendingIntent callbackIntent = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                                 mgr.startResolutionActivity(cordova.getActivity(), 0, intent, callbackIntent);
-                            } catch (Exception e) {
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
                         }
                         Intent resultIntent = intent;
