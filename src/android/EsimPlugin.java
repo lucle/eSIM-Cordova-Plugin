@@ -56,7 +56,7 @@ public class EsimPlugin extends CordovaPlugin {
         boolean result = mgr.isEnabled();
         callback.sendPluginResult(new PluginResult(Status.OK, result));
     }
-    private void installEsim(JSONArray args, CallbackContext callbackContext){
+    private void installEsim(JSONArray args, CallbackContext callbackContext) throws JSONException{
         // Register receiver.
         String LPA_DECLARED_PERMISSION = args.getString(0);
         String activationCode = args.getString(1);
