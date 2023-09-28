@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 public class EsimPlugin extends CordovaPlugin {
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
+    private static final String ACTION_SWITCH_TO_SUBSCRIPTION  = "download_subscription";
     Context mainContext;
     EuiccManager mgr;
     private CallbackContext callback;
@@ -36,6 +37,12 @@ public class EsimPlugin extends CordovaPlugin {
         if (HAS_ESIM_ENABLED.equals(action)) {
             hasEsimEnabled();
             return true;
+        }else if (ACTION_SWITCH_TO_SUBSCRIPTION.equals(action)) {
+            String address = args.getString(0);
+            String activationCode = args.getString(1);
+            String iccid = args.getString(2);
+            String confirmationCode = args.getString(3);
+            installEsim(address, activationCode, iccid, confirmationCode);
         } else {
             return false;
         }
@@ -46,12 +53,11 @@ public class EsimPlugin extends CordovaPlugin {
     }
     private void installEsim(String address, String activationCode, String iccid, String confirmationCode) throws JSONException{
         // Register receiver.
-        String action = "download_subscription";
         String LPA_DECLARED_PERMISSION = address;
         BroadcastReceiver receiver = new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-                        if (!action.equals(intent.getAction())) {
+                        if (!ACTION_SWITCH_TO_SUBSCRIPTION.equals(intent.getAction())) {
                             return;
                         }
                         int resultCode = getResultCode();
@@ -68,11 +74,11 @@ public class EsimPlugin extends CordovaPlugin {
                         Intent resultIntent = intent;
                     }
                 };
-        mainContext.registerReceiver(receiver, new IntentFilter(action), LPA_DECLARED_PERMISSION, null);
+        mainContext.registerReceiver(receiver, new IntentFilter(ACTION_SWITCH_TO_SUBSCRIPTION), LPA_DECLARED_PERMISSION, null);
 
         // Download subscription asynchronously.
         DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode);
-        Intent intent = new Intent(action);
+        Intent intent = new Intent(ACTION_SWITCH_TO_SUBSCRIPTION);
         PendingIntent callbackIntent = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         mgr.downloadSubscription(sub, true, callbackIntent);
         callback.sendPluginResult(new PluginResult(Status.OK, "success"));
