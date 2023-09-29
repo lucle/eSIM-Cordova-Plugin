@@ -65,7 +65,7 @@ public class EsimPlugin extends CordovaPlugin {
         // Register receiver.
         String LPA_DECLARED_PERMISSION = args.getString(0);
         String activationCode = args.getString(1);
-        LOG.d(LOG_TAG, "activationCode = " + activationCode "\n LPA_DECLARED_PERMISSION: " + LPA_DECLARED_PERMISSION);
+        LOG.d(LOG_TAG, "activationCode = " + activationCode + "\n LPA_DECLARED_PERMISSION: " + LPA_DECLARED_PERMISSION);
         try{
             BroadcastReceiver receiver = new BroadcastReceiver() {
                         @Override
