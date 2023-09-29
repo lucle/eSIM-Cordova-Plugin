@@ -43,7 +43,9 @@ public class EsimPlugin extends CordovaPlugin {
             }else if (ACTION_DOWNLOAD_SUBSCRIPTION.equals(action)) {   
                 LOG.d(LOG_TAG, "install eSIM");     
                 installEsim(args, callbackContext);
-            } 
+            }else{
+                return false;
+            }
         } catch (Exception e) {
             LOG.e(LOG_TAG, "Error execute "  + e.getMessage());
             return false;
@@ -87,7 +89,7 @@ public class EsimPlugin extends CordovaPlugin {
                             Intent resultIntent = intent;
                         }
                     };
-            mainContext.registerReceiver(receiver, new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), LPA_DECLARED_PERMISSION, null);
+            mainContext.registerReceiver(receiver, new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), null, null);
 
             // Download subscription asynchronously.
             DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode);
