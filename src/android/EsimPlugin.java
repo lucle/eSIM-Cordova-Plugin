@@ -14,11 +14,13 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
 import org.apache.cordova.PluginResult.Status;
+import org.apache.cordova.LOG;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class EsimPlugin extends CordovaPlugin {
+    protected static final String LOG_TAG = "eSIM";
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
     private String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
     Context mainContext;
@@ -36,12 +38,14 @@ public class EsimPlugin extends CordovaPlugin {
         callback = callbackContext;
         try {
             if (HAS_ESIM_ENABLED.equals(action)) {
+                LOG.d(LOG_TAG, "checking eSIM support");
                 hasEsimEnabled();
-            }else if (ACTION_DOWNLOAD_SUBSCRIPTION.equals(action)) {        
+            }else if (ACTION_DOWNLOAD_SUBSCRIPTION.equals(action)) {   
+                LOG.d(LOG_TAG, "install eSIM");     
                 installEsim(args, callbackContext);
             } 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.e(LOG_TAG, "Error execute "  + e.getMessage());
             return false;
         }
         return true;
@@ -61,6 +65,7 @@ public class EsimPlugin extends CordovaPlugin {
         // Register receiver.
         String LPA_DECLARED_PERMISSION = args.getString(0);
         String activationCode = args.getString(1);
+        LOG.d(LOG_TAG, "activationCode = " + activationCode "\n LPA_DECLARED_PERMISSION: " + LPA_DECLARED_PERMISSION);
         try{
             BroadcastReceiver receiver = new BroadcastReceiver() {
                         @Override
@@ -74,7 +79,8 @@ public class EsimPlugin extends CordovaPlugin {
                                 try {
                                     PendingIntent callbackIntent = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                                     mgr.startResolutionActivity(cordova.getActivity(), 0, intent, callbackIntent);
-                                } catch (Exception e) {          
+                                } catch (Exception e) {  
+                                    LOG.e(LOG_TAG, "Error startResolutionActivity "  + e.getMessage());        
                                     callbackContext.error(e.getMessage());                     
                                 }
                             }
@@ -90,6 +96,7 @@ public class EsimPlugin extends CordovaPlugin {
             mgr.downloadSubscription(sub, true, callbackIntent);
             callbackContext.sendPluginResult(new PluginResult(Status.OK, "success"));
         }catch (Exception e) {
+            LOG.e(LOG_TAG, "Error install eSIM "  + e.getMessage());
             callbackContext.error(e.getMessage());
         }
     }       
