@@ -23,11 +23,11 @@
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="application">
-            <service android:name=".EuiccServiceImpl" android:permission="android.permission.BIND_EUICC_SERVICE">
-            <intent-filter android:priority="100">
-                <action android:name="android.service.euicc.EuiccService" />
-            </intent-filter>
-        </service>
+            <service android:name=".EuiccServiceImpl" android:permission="android.permission.BIND_EUICC_SERVICE" android:exported="true">
+                <intent-filter android:priority="100">
+                    <action android:name="android.service.euicc.EuiccService" />
+                </intent-filter>
+            </service>
         </config-file>
         <source-file src="src/android/EsimPlugin.java" target-dir="src/com/dreamcloud" />
     </platform>
