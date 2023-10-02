@@ -29,6 +29,9 @@
                 </intent-filter>
             </service>
         </config-file>
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS" />
+        </config-file>
         <source-file src="src/android/EsimPlugin.java" target-dir="src/com/dreamcloud" />
     </platform>
 
