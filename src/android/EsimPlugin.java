@@ -103,7 +103,7 @@ public class EsimPlugin extends CordovaPlugin {
             Intent intent = new Intent(ACTION_DOWNLOAD_SUBSCRIPTION);
             PendingIntent callbackIntent = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
             mgr.downloadSubscription(sub, true, callbackIntent);
-            callbackContext.sendPluginResult(new PluginResult(Status.OK));
+            callbackContext.sendPluginResult(new PluginResult(Status.OK), "success");
         }catch (Exception e) {
             Log.e(LOG_TAG, "Error install eSIM "  + e.getMessage());
             callbackContext.error(e.getMessage());
