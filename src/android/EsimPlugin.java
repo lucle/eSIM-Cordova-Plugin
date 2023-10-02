@@ -36,7 +36,7 @@ public class EsimPlugin extends CordovaPlugin {
      }
     @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
-        this.callbackContext = callbackContext;
+        callbackContext = callbackContext;
         try {
             if (HAS_ESIM_ENABLED.equals(action)) {
                 Log.d(LOG_TAG, "checking eSIM support");
