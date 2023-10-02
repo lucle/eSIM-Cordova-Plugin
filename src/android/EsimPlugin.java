@@ -2,6 +2,7 @@ package com.dreamcloud;
 // The native android API
 import android.telephony.euicc.EuiccManager;
 import android.telephony.euicc.DownloadableSubscription;
+
 import android.content.Context;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
 import org.apache.cordova.PluginResult.Status;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +26,7 @@ public class EsimPlugin extends CordovaPlugin {
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
     private String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
     Context mainContext;
-    private CallbackContext callbackContext;
+    private CallbackContext callback;
     EuiccManager mgr;
 
      // at the initialize function, we can configure the tools we want to use later, like the sensors
@@ -36,11 +38,11 @@ public class EsimPlugin extends CordovaPlugin {
      }
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        this.callbackContext = callbackContext;
+        this.callback = callbackContext;
         try {
             if (HAS_ESIM_ENABLED.equals(action)) {
                 Log.d(LOG_TAG, "checking eSIM support");
-                hasEsimEnabled(callbackContext);
+                hasEsimEnabled();
             }else if (ACTION_DOWNLOAD_SUBSCRIPTION.equals(action)) {   
                 Log.d(LOG_TAG, "install eSIM");     
                 installEsim(args, callbackContext);
@@ -49,7 +51,7 @@ public class EsimPlugin extends CordovaPlugin {
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "Error execute "  + e.getMessage());
-            callbackContext.sendPluginResult(new PluginResult(Status.ERROR));
+            this.callback.sendPluginResult(new PluginResult(Status.ERROR));
             return false;
         }
         return true;
@@ -59,10 +61,10 @@ public class EsimPlugin extends CordovaPlugin {
           mgr = (EuiccManager) mainContext.getSystemService(Context.EUICC_SERVICE);
         }
     }
-    private void hasEsimEnabled(CallbackContext callbackContext) {
+    private void hasEsimEnabled() {
         initMgr();
         boolean result = mgr.isEnabled();
-        callbackContext.sendPluginResult(new PluginResult(Status.OK, result));
+        callback.sendPluginResult(new PluginResult(Status.OK, result));
     }
     private void installEsim(JSONArray args, CallbackContext callbackContext) throws JSONException{
         initMgr();
