@@ -48,6 +48,7 @@ public class EsimPlugin extends CordovaPlugin {
             }
         } catch (Exception e) {
             LOG.e(LOG_TAG, "Error execute "  + e.getMessage());
+            callbackContext.sendPluginResult(new PluginResult(Status.ERROR));
             return false;
         }
         return true;
@@ -83,9 +84,14 @@ public class EsimPlugin extends CordovaPlugin {
                                     mgr.startResolutionActivity(cordova.getActivity(), 0, intent, callbackIntent);
                                 } catch (Exception e) {  
                                     LOG.e(LOG_TAG, "Error startResolutionActivity "  + e.getMessage());        
-                                    callbackContext.error(e.getMessage());                     
+                                    callbackContext.error(e.getMessage());    
+                                    callbackContext.sendPluginResult(new PluginResult(Status.ERROR));                 
                                 }
-                            }
+                            } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
+                                // Embedded Subscription Error
+                                LOG.e(LOG_TAG, "EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription");        
+                                callbackContext.error("EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription");  
+                              } 
                             Intent resultIntent = intent;
                         }
                     };
@@ -100,6 +106,7 @@ public class EsimPlugin extends CordovaPlugin {
         }catch (Exception e) {
             LOG.e(LOG_TAG, "Error install eSIM "  + e.getMessage());
             callbackContext.error(e.getMessage());
+            callbackContext.sendPluginResult(new PluginResult(Status.ERROR));
         }
     }       
 }
