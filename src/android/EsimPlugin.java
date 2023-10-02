@@ -24,6 +24,7 @@ public class EsimPlugin extends CordovaPlugin {
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
     private String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
     Context mainContext;
+    private CallbackContext callbackContext;
     EuiccManager mgr;
 
      // at the initialize function, we can configure the tools we want to use later, like the sensors
@@ -35,6 +36,7 @@ public class EsimPlugin extends CordovaPlugin {
      }
     @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
+        this.callbackContext = callbackContext;
         try {
             if (HAS_ESIM_ENABLED.equals(action)) {
                 Log.d(LOG_TAG, "checking eSIM support");
@@ -101,7 +103,7 @@ public class EsimPlugin extends CordovaPlugin {
             Intent intent = new Intent(ACTION_DOWNLOAD_SUBSCRIPTION);
             PendingIntent callbackIntent = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
             mgr.downloadSubscription(sub, true, callbackIntent);
-            callbackContext.sendPluginResult(new PluginResult(Status.OK, "success"));
+            callbackContext.sendPluginResult(new PluginResult(Status.OK));
         }catch (Exception e) {
             Log.e(LOG_TAG, "Error install eSIM "  + e.getMessage());
             callbackContext.error(e.getMessage());
