@@ -31,7 +31,7 @@ public class EsimPlugin extends CordovaPlugin {
      public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
         mainContext = this.cordova.getActivity().getApplicationContext();
-        Log.d(TAG, "initialize()");
+        Log.d(LOG_TAG, "initialize()");
      }
     @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
