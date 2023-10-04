@@ -84,9 +84,12 @@ public class EsimPlugin extends CordovaPlugin {
                         }
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
                         // Embedded Subscription Error
-                        LOG.e(LOG_TAG, "EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription");        
+                        LOG.i(LOG_TAG, "EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription");        
                         callbackContext.error("EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription");  
-                        } 
+                    } else {
+                        LOG.i(LOG_TAG, "Can't add an Esim subscription due to unknown error");        
+                        callbackContext.error("Can't add an Esim subscription due to unknown error"); 
+                    } 
                     Intent resultIntent = intent;
                 }
             };
@@ -95,9 +98,14 @@ public class EsimPlugin extends CordovaPlugin {
             
             // Download subscription asynchronously.
             DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode);
-            Intent intent = new Intent(ACTION_DOWNLOAD_SUBSCRIPTION);
-            PendingIntent callbackIntent = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
-            mgr.downloadSubscription(sub, true, callbackIntent);
+            PendingIntent callbackIntent = PendingIntent.getBroadcast(
+                mainContext,
+                0,
+                new Intent(ACTION_DOWNLOAD_SUBSCRIPTION),
+                PendingIntent.FLAG_UPDATE_CURRENT |
+                    PendingIntent.FLAG_MUTABLE);
+        
+            mgr.downloadSubscription(sub, true, callbackIntent);            
             callbackContext.sendPluginResult(new PluginResult(Status.OK, "success"));
         }catch (Exception e) {
             LOG.e(LOG_TAG, "Error install eSIM "  + e.getMessage());
