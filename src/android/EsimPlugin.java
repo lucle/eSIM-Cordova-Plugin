@@ -28,6 +28,11 @@ public class EsimPlugin extends CordovaPlugin {
     private Context mainContext;
     private CallbackContext callback;
     private EuiccManager mgr;
+    
+    private static final String LPA_DECLARED_PERMISSION = "com.dreamcloud.lpa.permission.BROADCAST";
+    String address;
+    String matchingID;
+    String activationCode ;
 
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
@@ -68,15 +73,13 @@ public class EsimPlugin extends CordovaPlugin {
         callback.sendPluginResult(new PluginResult(Status.OK, result));
     }
 
-    private void installEsim(JSONArray args){
-        initMgr();
-        // Register receiver.
-        String LPA_DECLARED_PERMISSION = "com.dreamcloud.lpa.permission.BROADCAST";
-        String address = args.getString(0);
-        String matchingID = args.getString(1);
-        String activationCode = "1$" + address + "$" + matchingID;
-        LOG.i(LOG_TAG, "activationCode = " + activationCode + "\n LPA_DECLARED_PERMISSION: " + LPA_DECLARED_PERMISSION);
+    private void installEsim(JSONArray args) {         
         try{
+            initMgr(); 
+            address = args.getString(0);
+            matchingID = args.getString(1);
+            activationCode = "1$" + address + "$" + matchingID;
+            LOG.i(LOG_TAG, "activationCode = " + activationCode + "\n LPA_DECLARED_PERMISSION: " + LPA_DECLARED_PERMISSION);
             BroadcastReceiver receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
