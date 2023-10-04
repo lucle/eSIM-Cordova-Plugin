@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        id="cordova-plugin-esim" version="0.0.1">
+        id="cordova-plugin-esim" version="0.0.1" xmlns:tools="http://schemas.android.com/tools">
     <name>EsimPlugin</name>
 
     <description>An Android Cordova plugin that checks is esim is supported</description>
@@ -23,8 +23,8 @@
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">
-            <uses-permission android:name="android.permission.BIND_EUICC_SERVICE" />
-            <uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS" />
+            <uses-permission android:name="android.permission.BIND_EUICC_SERVICE" tools:ignore="ProtectedPermissions"/>
+            <uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS" tools:ignore="ProtectedPermissions"/>
         </config-file>       
         <source-file src="src/android/EsimPlugin.java" target-dir="src/com/dreamcloud" />
     </platform>
