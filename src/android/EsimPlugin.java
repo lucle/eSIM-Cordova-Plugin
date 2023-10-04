@@ -57,8 +57,10 @@ public class EsimPlugin extends CordovaPlugin {
     private void installEsim(JSONArray args, CallbackContext callbackContext) throws JSONException{
         Context mainContext = this.cordova.getActivity().getApplicationContext();
         // Register receiver.
-        String LPA_DECLARED_PERMISSION = args.getString(0);
-        String activationCode = args.getString(1);
+        String LPA_DECLARED_PERMISSION = "com.your.company.lpa.permission.BROADCAST";
+        String address = args.getString(0);
+        String matchingID = args.getString(1);
+        String activationCode = "1$" + address + "$" + matchingID;
         LOG.i(LOG_TAG, "activationCode = " + activationCode + "\n LPA_DECLARED_PERMISSION: " + LPA_DECLARED_PERMISSION);
         try{
             BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -88,6 +90,7 @@ public class EsimPlugin extends CordovaPlugin {
             };
             mainContext.registerReceiver(receiver, new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), null, null);
 
+            EuiccManager mgr = (EuiccManager) context.getSystemService(Context.EUICC_SERVICE);
             // Download subscription asynchronously.
             DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode);
             Intent intent = new Intent(ACTION_DOWNLOAD_SUBSCRIPTION);
