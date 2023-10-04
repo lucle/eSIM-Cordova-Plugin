@@ -24,7 +24,7 @@ import org.json.JSONObject;
 public class EsimPlugin extends CordovaPlugin {
     protected static final String LOG_TAG = "eSIM";
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
-    private static final String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
+    private static final String ACTION_DOWNLOAD_SUBSCRIPTION = "installEsim";
     private Context mainContext;
     private EuiccManager mgr;
     
