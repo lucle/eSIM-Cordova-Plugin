@@ -24,7 +24,7 @@ import org.json.JSONObject;
 public class EsimPlugin extends CordovaPlugin {
     protected static final String LOG_TAG = "eSIM";
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
-    private String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
+    private static final String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
     private CallbackContext callback;
 
     @Override
@@ -34,25 +34,26 @@ public class EsimPlugin extends CordovaPlugin {
             if (HAS_ESIM_ENABLED.equals(action)) {
                 LOG.i(LOG_TAG, "checking eSIM support");
                 hasEsimEnabled();
+                return true;
             }else if (ACTION_DOWNLOAD_SUBSCRIPTION.equals(action)) {   
                 LOG.i(LOG_TAG, "install eSIM");     
                 installEsim(args, callbackContext);
+                return true;
             }else{
                 return false;
             }
         } catch (Exception e) {
             LOG.e(LOG_TAG, "Error execute "  + e.getMessage());
-            this.callback.sendPluginResult(new PluginResult(Status.ERROR));
+            callback.sendPluginResult(new PluginResult(Status.ERROR));
             return false;
         }
-        return true;
     }
 
     private void hasEsimEnabled() {
         Context context = this.cordova.getActivity().getApplicationContext();
         EuiccManager mgr = (EuiccManager) context.getSystemService(Context.EUICC_SERVICE);
         boolean result = mgr.isEnabled();
-        this.callback.sendPluginResult(new PluginResult(Status.OK, result));
+        callback.sendPluginResult(new PluginResult(Status.OK, result));
     }
     private void installEsim(JSONArray args, CallbackContext callbackContext) throws JSONException{
         Context mainContext = this.cordova.getActivity().getApplicationContext();
