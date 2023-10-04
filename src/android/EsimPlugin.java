@@ -25,12 +25,13 @@ public class EsimPlugin extends CordovaPlugin {
     protected static final String LOG_TAG = "eSIM";
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
     private static final String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
-    Context mainContext;
+    private Context mainContext;
     private CallbackContext callback;
+    private EuiccManager mgr;
 
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
-        mainContext = this.cordova.getActivity().getApplicationContext();
+        mainContext = cordova.getContext();
         LOG.i(LOG_TAG, "initialize()");
      }
 
@@ -66,10 +67,11 @@ public class EsimPlugin extends CordovaPlugin {
         boolean result = mgr.isEnabled();
         callback.sendPluginResult(new PluginResult(Status.OK, result));
     }
-    private void installEsim(JSONArray args) throws JSONException{
+
+    private void installEsim(JSONArray args){
         initMgr();
         // Register receiver.
-        String LPA_DECLARED_PERMISSION = "com.your.company.lpa.permission.BROADCAST";
+        String LPA_DECLARED_PERMISSION = "com.dreamcloud.lpa.permission.BROADCAST";
         String address = args.getString(0);
         String matchingID = args.getString(1);
         String activationCode = "1$" + address + "$" + matchingID;
@@ -104,8 +106,7 @@ public class EsimPlugin extends CordovaPlugin {
                 }
             };
             mainContext.registerReceiver(receiver, new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), null, null);
-
-            
+         
             // Download subscription asynchronously.
             DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode);
             PendingIntent callbackIntent = PendingIntent.getBroadcast(
