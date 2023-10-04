@@ -41,7 +41,7 @@ public class EsimPlugin extends CordovaPlugin {
      }
 
     @Override
-    public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
+    public boolean execute(String action, JSONArray args, final CallbackContext callbackContext){
         callback = callbackContext;
         try {
             if (HAS_ESIM_ENABLED.equals(action)) {
@@ -51,11 +51,12 @@ public class EsimPlugin extends CordovaPlugin {
                 LOG.i(LOG_TAG, "install eSIM");     
                 installEsim(args);
             }else{
+                callback.sendPluginResult(new PluginResult(Status.INVALID_ACTION));
                 return false;
             }
-        } catch (Exception e) {
+        } catch (JSONException e) {
             LOG.e(LOG_TAG, "Error execute "  + e.getMessage());
-            callback.sendPluginResult(new PluginResult(Status.ERROR));
+            callback.sendPluginResult(new PluginResult(Status.JSON_EXCEPTION));
             return false;
         }
         return true;
@@ -92,10 +93,10 @@ public class EsimPlugin extends CordovaPlugin {
                         try {
                             PendingIntent callbackIntent = PendingIntent.getBroadcast(mainContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                             mgr.startResolutionActivity(cordova.getActivity(), 0, intent, callbackIntent);
-                        } catch (Exception e) {  
+                        } catch (JSONException e) {  
                             LOG.e(LOG_TAG, "Error startResolutionActivity "  + e.getMessage());        
                             callback.error(e.getMessage());    
-                            callback.sendPluginResult(new PluginResult(Status.ERROR));                 
+                            callback.sendPluginResult(new PluginResult(Status.JSON_EXCEPTION));                 
                         }
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
                         // Embedded Subscription Error
@@ -121,10 +122,10 @@ public class EsimPlugin extends CordovaPlugin {
         
             mgr.downloadSubscription(sub, true, callbackIntent);            
             callback.sendPluginResult(new PluginResult(Status.OK, "success"));
-        }catch (Exception e) {
+        }catch (JSONException e) {
             LOG.e(LOG_TAG, "Error install eSIM "  + e.getMessage());
             callback.error(e.getMessage());
-            callback.sendPluginResult(new PluginResult(Status.ERROR));
+            callback.sendPluginResult(new PluginResult(Status.JSON_EXCEPTION));
         }
     }       
 }
