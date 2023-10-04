@@ -25,19 +25,10 @@ public class EsimPlugin extends CordovaPlugin {
     protected static final String LOG_TAG = "eSIM";
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
     private String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
-    Context mainContext;
     private CallbackContext callback;
-    EuiccManager mgr;
 
-     // at the initialize function, we can configure the tools we want to use later, like the sensors
-     @Override
-     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
-        super.initialize(cordova, webView);
-        mainContext = this.cordova.getActivity().getApplicationContext();
-        LOG.i(LOG_TAG, "initialize()");
-     }
     @Override
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+    public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
         callback = callbackContext;
         try {
             if (HAS_ESIM_ENABLED.equals(action)) {
@@ -56,18 +47,15 @@ public class EsimPlugin extends CordovaPlugin {
         }
         return true;
     }
-    private void initMgr() {
-        if (mgr == null) {
-          mgr = (EuiccManager) mainContext.getSystemService(Context.EUICC_SERVICE);
-        }
-    }
+
     private void hasEsimEnabled() {
-        initMgr();
+        Context context = this.cordova.getActivity().getApplicationContext();
+        EuiccManager mgr = (EuiccManager) context.getSystemService(Context.EUICC_SERVICE);
         boolean result = mgr.isEnabled();
         this.callback.sendPluginResult(new PluginResult(Status.OK, result));
     }
     private void installEsim(JSONArray args, CallbackContext callbackContext) throws JSONException{
-        initMgr();
+        Context mainContext = this.cordova.getActivity().getApplicationContext();
         // Register receiver.
         String LPA_DECLARED_PERMISSION = args.getString(0);
         String activationCode = args.getString(1);
