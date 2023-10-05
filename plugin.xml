@@ -23,6 +23,7 @@
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
             <uses-permission android:name="android.permission.BIND_EUICC_SERVICE" tools:ignore="ProtectedPermissions"/>
             <uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS" tools:ignore="ProtectedPermissions"/>
         </config-file>       
@@ -99,3 +100,24 @@
         <source-file src="src/ios/EsimPlugin.m" />
     </platform>
 </plugin>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
