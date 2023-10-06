@@ -82,7 +82,7 @@ public class EsimPlugin extends CordovaPlugin {
                     }
                     int resultCode = getResultCode();
                     // If the result code is a resolvable error, call startResolutionActivity
-                    if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR) {
+                    if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {
                         try {
                             int resolutionRequestCode = 3;
                             PendingIntent callbackIntent = PendingIntent.getBroadcast(mainContext, resolutionRequestCode, 
@@ -93,6 +93,9 @@ public class EsimPlugin extends CordovaPlugin {
                             callbackContext.error("Error startResolutionActivity "  + e.getMessage());    
                             callbackContext.sendPluginResult(new PluginResult(Status.ERROR));                 
                         }
+                    } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {
+                        LOG.i(LOG_TAG, "EMBEDDED_SUBSCRIPTION_RESULT_OK " + String.valueOf(resultCode));        
+                        callbackContext.error("EMBEDDED_SUBSCRIPTION_RESULT_OK " + String.valueOf(resultCode)); 
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
                         // Embedded Subscription Error
                         int detailedCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, 0);
