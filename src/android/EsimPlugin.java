@@ -84,7 +84,7 @@ public class EsimPlugin extends CordovaPlugin {
                     // If the result code is a resolvable error, call startResolutionActivity
                     if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {
                         try {
-                            int resolutionRequestCode = 3;
+                            int resolutionRequestCode = resultCode;
                             PendingIntent callbackIntent = PendingIntent.getBroadcast(mainContext, resolutionRequestCode, 
                                 new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode, intent, callbackIntent);
