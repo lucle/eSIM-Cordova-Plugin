@@ -78,6 +78,7 @@ public class EsimPlugin extends CordovaPlugin {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     if (!ACTION_DOWNLOAD_SUBSCRIPTION.equals(intent.getAction())) {
+                        callbackContext.error("Can't setup eSim due to wrong Intent:" + intent.getAction() + " instead of " + ACTION_DOWNLOAD_SUBSCRIPTION); 
                         return;
                     }
                     int resultCode = getResultCode();
