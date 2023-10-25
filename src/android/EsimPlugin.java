@@ -85,7 +85,7 @@ public class EsimPlugin extends CordovaPlugin {
                     if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {                      
                         int resolutionRequestCode = resultCode;
                         PendingIntent callbackIntent = PendingIntent.getBroadcast(cordova.getContext(), resolutionRequestCode, 
-                            new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+                            intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                         try{
                             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode, intent, callbackIntent);
                         } catch (Exception e) {  
@@ -109,14 +109,15 @@ public class EsimPlugin extends CordovaPlugin {
                     Intent resultIntent = intent;
                 }
             };
-            mainContext.registerReceiver(receiver, new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), null, null);
+            mainContext.registerReceiver(receiver, new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), null , null);
          
             // Download subscription asynchronously.
             DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode);
+            Intent intent = new Intent(ACTION_DOWNLOAD_SUBSCRIPTION);
             PendingIntent callbackIntent = PendingIntent.getBroadcast(
                 mainContext,
                 0,
-                new Intent(ACTION_DOWNLOAD_SUBSCRIPTION),
+                intent,
                 PendingIntent.FLAG_UPDATE_CURRENT |
                     PendingIntent.FLAG_MUTABLE);
         
