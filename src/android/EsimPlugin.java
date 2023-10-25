@@ -70,7 +70,7 @@ public class EsimPlugin extends CordovaPlugin {
         callbackContext.sendPluginResult(new PluginResult(Status.OK, result));
     }
 
-    private void handleResolvableError(Intent intent) {
+    private void handleResolvableError(CallbackContext callbackContext, Intent intent) {
         // Resolvable error, attempt to resolve it by a user action
         int resolutionRequestCode = 3;
         PendingIntent callbackIntent = PendingIntent.getBroadcast(
@@ -106,7 +106,7 @@ public class EsimPlugin extends CordovaPlugin {
                     int resultCode = getResultCode();
                     // If the result code is a resolvable error, call startResolutionActivity
                     if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {                      
-                        handleResolvableError(intent);
+                        handleResolvableError(callbackContext, intent);
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {     
                         callbackContext.error("EMBEDDED_SUBSCRIPTION_RESULT_OK " + String.valueOf(resultCode)); 
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
