@@ -41,6 +41,7 @@
                 <action android:name="android.service.euicc.action.BIND_CARRIER_PROVISIONING_SERVICE"/>
                 </intent-filter>
             </service>
+        </config-file>
         <source-file src="src/android/EsimPlugin.java" target-dir="src/com/dreamcloud" />
     </platform>
 
