@@ -78,16 +78,15 @@ public class EsimPlugin extends CordovaPlugin {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     if (!ACTION_DOWNLOAD_SUBSCRIPTION.equals(intent.getAction())) {
-                        callbackContext.error("Can't setup eSim due to wrong Intent:" + intent.getAction() + " instead of " + ACTION_DOWNLOAD_SUBSCRIPTION); 
                         return;
                     }
                     int resultCode = getResultCode();
                     // If the result code is a resolvable error, call startResolutionActivity
-                    if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {
-                        try {
-                            int resolutionRequestCode = resultCode;
-                            PendingIntent callbackIntent = PendingIntent.getBroadcast(mainContext, resolutionRequestCode, 
-                                new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+                    if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {                      
+                        int resolutionRequestCode = resultCode;
+                        PendingIntent callbackIntent = PendingIntent.getBroadcast(cordova.getContext(), resolutionRequestCode, 
+                            new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+                        try{
                             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode, intent, callbackIntent);
                         } catch (Exception e) {  
                             LOG.e(LOG_TAG, "Error startResolutionActivity "  + e.getMessage());        
