@@ -78,7 +78,6 @@ public class EsimPlugin extends CordovaPlugin {
             resolutionRequestCode, 
             new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), 
             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
-        );
         try{
             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode, intent, callbackIntent);
         } catch (Exception e) {          
