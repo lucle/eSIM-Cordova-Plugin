@@ -36,12 +36,12 @@
                     <category android:name="android.service.euicc.category.EUICC_UI" />
                 </intent-filter>
             </activity>
-            <!-- <service android:name=".CarrierEuiccProvisioningService" android:exported="true" android:permission="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS">
+            <service android:name=".CarrierEuiccProvisioningService" android:exported="true" android:permission="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS">
                 <intent-filter>
                     <action android:name="android.service.euicc.action.BIND_CARRIER_PROVISIONING_SERVICE"/>
                 </intent-filter>
-            </service> -->
-            <service android:name=".EuiccServiceImpl" android:permission="android.permission.BIND_EUICC_SERVICE">
+            </service>
+            <service android:name=".EuiccServiceImpl" android:exported="true" android:permission="android.permission.BIND_EUICC_SERVICE">
                 <intent-filter android:priority="100">
                     <action android:name="android.service.euicc.EuiccService" />
                 </intent-filter>
