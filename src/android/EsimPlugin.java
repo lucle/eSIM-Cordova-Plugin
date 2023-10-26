@@ -71,7 +71,6 @@ public class EsimPlugin extends CordovaPlugin {
     }
 
     private void handleResolvableError(CallbackContext callbackContext, Intent intent) {
-        initMgr();
         // Resolvable error, attempt to resolve it by a user action
         int resolutionRequestCode = 3;
         PendingIntent callbackIntent = PendingIntent.getBroadcast(
@@ -107,7 +106,7 @@ public class EsimPlugin extends CordovaPlugin {
                     if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {                      
                         handleResolvableError(callbackContext, intent);
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {     
-                        callbackContext.error("EMBEDDED_SUBSCRIPTION_RESULT_OK " + String.valueOf(resultCode)); 
+                        callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
                         // Embedded Subscription Error     
                         callbackContext.error("EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription" );  
