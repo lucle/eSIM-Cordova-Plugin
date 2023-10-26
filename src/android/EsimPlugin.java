@@ -80,7 +80,7 @@ public class EsimPlugin extends CordovaPlugin {
             new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), 
             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         try{
-            mgr.startResolutionActivity(this.cordova.getActivity(), resolutionRequestCode, intent, callbackIntent);
+            mgr.startResolutionActivity(this/*cordova.getActivity()*/, resolutionRequestCode, intent, callbackIntent);
         } catch (Exception e) {          
             LOG.d(LOG_TAG, "Error startResolutionActivity " + e.getMessage());
             callbackContext.error("Error startResolutionActivity "  + e.getMessage());    
@@ -115,7 +115,7 @@ public class EsimPlugin extends CordovaPlugin {
                             new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), 
                             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                         try{
-                            mgr.startResolutionActivity(this.cordova.getActivity(), resolutionRequestCode, intent, callbackIntent);
+                            mgr.startResolutionActivity(this/*cordova.getActivity()*/), resolutionRequestCode, intent, callbackIntent);
                         } catch (Exception e) {          
                             LOG.d(LOG_TAG, "Error startResolutionActivity " + e.getMessage());
                             callbackContext.error("Error startResolutionActivity "  + e.getMessage());    
