@@ -61,8 +61,9 @@ public class EsimPlugin extends CordovaPlugin {
     }
 
     private boolean checkCarrierPrivileges() {
-        TelephonyManager telManager = (TelephonyManager) mainContext.getSystemService(Context.TELEPHONY_SERVICE);
-            return telManager.hasCarrierPrivileges();
+        TelephonyManager telephonyManager  = (TelephonyManager) mainContext.getSystemService(Context.TELEPHONY_SERVICE);
+        boolean isCarrier = telephonyManager .hasCarrierPrivileges();
+        return isCarrier;
     }
 
     private void hasEsimEnabled(CallbackContext callbackContext) {
@@ -92,10 +93,10 @@ public class EsimPlugin extends CordovaPlugin {
         try{
             initMgr(); 
             
-            // if (!checkCarrierPrivileges()) {
-            //     callbackContext.error("No carrier privileges detected");
-            //     return;
-            // }
+            if (!checkCarrierPrivileges()) {
+                callbackContext.error("No carrier privileges detected");
+                return;
+            }
             BroadcastReceiver receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
