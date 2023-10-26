@@ -71,6 +71,7 @@ public class EsimPlugin extends CordovaPlugin {
     }
 
     private void handleResolvableError(CallbackContext callbackContext, Intent intent) {
+        initMgr();
         // Resolvable error, attempt to resolve it by a user action
         int resolutionRequestCode = 3;
         PendingIntent callbackIntent = PendingIntent.getBroadcast(
@@ -89,9 +90,7 @@ public class EsimPlugin extends CordovaPlugin {
     private void installEsim(JSONArray args, CallbackContext callbackContext) {         
         try{
             initMgr(); 
-            address = args.getString(0);
-            matchingID = args.getString(1);
-            activationCode = "1$" + address + "$" + matchingID;
+            
             if (!checkCarrierPrivileges()) {
                 callbackContext.error("No carrier privileges detected");
                 return;
@@ -123,7 +122,10 @@ public class EsimPlugin extends CordovaPlugin {
                 null , 
                 null
             );
-         
+            
+            address = args.getString(0);
+            matchingID = args.getString(1);
+            activationCode = "1$" + address + "$" + matchingID;
             // Download subscription asynchronously.
             DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode);
         
