@@ -38,6 +38,7 @@ public class EsimPlugin extends CordovaPlugin {
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
         mainContext = cordova.getContext();
+        LOG.d(LOG_TAG, "initialize()");
      }
 
     @Override
@@ -81,6 +82,7 @@ public class EsimPlugin extends CordovaPlugin {
         try{
             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode, intent, callbackIntent);
         } catch (Exception e) {          
+            LOG.d(LOG_TAG, "Error startResolutionActivity " + e.getMessage());
             callbackContext.error("Error startResolutionActivity "  + e.getMessage());    
             callbackContext.sendPluginResult(new PluginResult(Status.ERROR));                 
         }
@@ -98,6 +100,7 @@ public class EsimPlugin extends CordovaPlugin {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     if (!ACTION_DOWNLOAD_SUBSCRIPTION.equals(intent.getAction())) {       
+                        LOG.d(LOG_TAG, "Can't setup eSim due to wrong Intent:" + intent.getAction() + " instead of " + ACTION_DOWNLOAD_SUBSCRIPTION); 
                         callbackContext.error("Can't setup eSim due to wrong Intent:" + intent.getAction() + " instead of " + ACTION_DOWNLOAD_SUBSCRIPTION); 
                         return;
                     }
@@ -105,12 +108,15 @@ public class EsimPlugin extends CordovaPlugin {
                     // If the result code is a resolvable error, call startResolutionActivity
                     if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {                      
                         handleResolvableError(callbackContext, intent);
-                    } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {     
+                    } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {
+                        LOG.d(LOG_TAG, "EMBEDDED_SUBSCRIPTION_RESULT_OK " + String.valueOf(resultCode));     
                         callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
                         // Embedded Subscription Error     
+                        LOG.d(LOG_TAG, "EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription");
                         callbackContext.error("EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription" );  
-                    } else {      
+                    } else {   
+                        LOG.d(LOG_TAG, "Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode));   
                         callbackContext.error("Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode)); 
                     }
                 }
@@ -125,6 +131,7 @@ public class EsimPlugin extends CordovaPlugin {
             address = args.getString(0);
             matchingID = args.getString(1);
             activationCode = "1$" + address + "$" + matchingID;
+            LOG.d(LOG_TAG, "activationCode = " + activationCode + "\n LPA_DECLARED_PERMISSION: " + LPA_DECLARED_PERMISSION);
             // Download subscription asynchronously.
             DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode);
         
@@ -138,6 +145,7 @@ public class EsimPlugin extends CordovaPlugin {
             mgr.downloadSubscription(sub, true, callbackIntent);            
             callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
         }catch (Exception e) {
+            LOG.d(LOG_TAG, "Error install eSIM " + e.getMessage());
             callbackContext.error("Error install eSIM "  + e.getMessage());
             callbackContext.sendPluginResult(new PluginResult(Status.ERROR));
         }
