@@ -62,7 +62,7 @@ public class EsimPlugin extends CordovaPlugin {
 
     private boolean checkCarrierPrivileges() {
         TelephonyManager telephonyManager  = (TelephonyManager) mainContext.getSystemService(Context.TELEPHONY_SERVICE);
-        boolean isCarrier = telephonyManager .hasCarrierPrivileges();
+        boolean isCarrier = telephonyManager.hasCarrierPrivileges();
         return isCarrier;
     }
 
