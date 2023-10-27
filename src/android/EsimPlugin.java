@@ -129,8 +129,8 @@ public class EsimPlugin extends CordovaPlugin {
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
                         // Embedded Subscription Error     
                         int detailedCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, 0);
-                        int operationCode = intent.get(EXTRA_EMBEDDED_SUBSCRIPTION_OPERATION_CODE);
-                        int errorCode = intent.get(EXTRA_EMBEDDED_SUBSCRIPTION_OPERATION_CODE);
+                        int operationCode = intent.get(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_OPERATION_CODE);
+                        int errorCode = intent.get(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_OPERATION_CODE);
                         LOG.i(LOG_TAG, "EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription");
                         callbackContext.error("EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription: detailedCode=" + detailedCode + " operationCode=" + operationCode + " errorCode=" + errorCode );  
                     } else {   
