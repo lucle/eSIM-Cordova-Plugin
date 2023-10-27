@@ -102,10 +102,10 @@ public class EsimPlugin extends CordovaPlugin {
                         callbackContext.error("Can't setup eSim due to wrong Intent:" + intent.getAction() + " instead of " + ACTION_DOWNLOAD_SUBSCRIPTION); 
                         return;
                     }
-                    if (!checkCarrierPrivileges()) {
-                        callbackContext.error("No carrier privileges detected");
-                        return;
-                    }
+                    // if (!checkCarrierPrivileges()) {
+                    //     callbackContext.error("No carrier privileges detected");
+                    //     return;
+                    // }
                     int resultCode = getResultCode();
                     // If the result code is a resolvable error, call startResolutionActivity
                     if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {                      
