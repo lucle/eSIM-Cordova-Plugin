@@ -118,6 +118,19 @@ public class EsimPlugin extends CordovaPlugin {
                             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                         try{
                             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode, intent, callbackIntent);
+                            ActivityEventListener activityEventListener = new BaseActivityEventListener() {
+                            @Override
+                            public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+                              if (requestCode == resolutionRequestCode) {
+                                if (resultCode == Activity.RESULT_CANCELED) {
+                                  callbackContext.error("Error startResolutionActivity "  + e.getLocalizedMessage());
+                                } else if (resultCode == Activity.RESULT_OK) {
+                                  callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
+                                }
+                              }
+                            }
+                            };
+                            mainContext.addActivityEventListener(activityEventListener);
                         } catch (Exception e) {
                             int detailedCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, 0);
                             int operationCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_OPERATION_CODE, 0);
