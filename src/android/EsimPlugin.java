@@ -23,7 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class EsimPlugin extends CordovaPlugin {
+public class EsimPlugin extends CordovaPlugin implements ActivityEventListener {
     protected static final String LOG_TAG = "eSIM";
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
     private static final String INSTALL_ESIM = "installEsim";
@@ -124,7 +124,7 @@ public class EsimPlugin extends CordovaPlugin {
                             public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
                               if (requestCode == resolutionRequestCode) {
                                 if (resultCode == Activity.RESULT_CANCELED) {
-                                  callbackContext.error("Error startResolutionActivity "  + e.getLocalizedMessage());
+                                  callbackContext.error("Error startResolutionActivity " );
                                 } else if (resultCode == Activity.RESULT_OK) {
                                   callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
                                 }
@@ -140,7 +140,7 @@ public class EsimPlugin extends CordovaPlugin {
                             String smdxReasonCode = intent.getStringExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_REASON_CODE);
                             callbackContext.error("Error startResolutionActivity - Can't add an Esim subscription: detailedCode=" + detailedCode + 
                                 " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode );
-                            LOG.d(LOG_TAG, "Error startResolutionActivity " + e.getMessage());
+                            LOG.d(LOG_TAG, "Error startResolutionActivity " + e.getLocalizedMessage());
                             //callbackContext.error("Error startResolutionActivity "  + e.getMessage());    
                             callbackContext.sendPluginResult(new PluginResult(Status.ERROR));                 
                         }
