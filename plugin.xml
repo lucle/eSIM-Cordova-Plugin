@@ -23,8 +23,9 @@
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">
-            <uses-permission android:name="android.permission.BIND_EUICC_SERVICE"/>
-            <uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS"/>
+                <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+                <uses-permission android:name="android.permission.BIND_EUICC_SERVICE"/>
+                <uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS"/>
         </config-file>    
         <source-file src="src/android/EsimPlugin.java" target-dir="src/com/dreamcloud" />
     </platform>
