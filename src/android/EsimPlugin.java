@@ -127,7 +127,7 @@ public class EsimPlugin extends CordovaPlugin {
                             callbackContext.error("Error startResolutionActivity - Can't add an Esim subscription: detailedCode=" + detailedCode + 
                                 " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode );
                             LOG.d(LOG_TAG, "Error startResolutionActivity " + e.getMessage());
-                            callbackContext.error("Error startResolutionActivity "  + e.getMessage());    
+                            //callbackContext.error("Error startResolutionActivity "  + e.getMessage());    
                             callbackContext.sendPluginResult(new PluginResult(Status.ERROR));                 
                         }
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {
