@@ -4,7 +4,6 @@ import android.telephony.euicc.EuiccManager;
 import android.telephony.euicc.DownloadableSubscription;
 import android.telephony.TelephonyManager;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
@@ -23,7 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class EsimPlugin extends CordovaPlugin implements ActivityEventListener {
+public class EsimPlugin extends CordovaPlugin{
     protected static final String LOG_TAG = "eSIM";
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
     private static final String INSTALL_ESIM = "installEsim";
@@ -114,24 +113,11 @@ public class EsimPlugin extends CordovaPlugin implements ActivityEventListener {
                         int resolutionRequestCode = 3;
                         PendingIntent callbackIntent = PendingIntent.getBroadcast(
                             mainContext, 
-                            resolutionRequestCode, 
+                            0, 
                             new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), 
                             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                         try{
                             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode, intent, callbackIntent);
-                            ActivityEventListener activityEventListener = new BaseActivityEventListener() {
-                            @Override
-                            public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-                              if (requestCode == resolutionRequestCode) {
-                                if (resultCode == Activity.RESULT_CANCELED) {
-                                  callbackContext.error("Canceled by user" );
-                                } else if (resultCode == Activity.RESULT_OK) {
-                                  callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
-                                }
-                              }
-                            }
-                            };
-                            mainContext.addActivityEventListener(activityEventListener);
                         } catch (Exception e) {
                             int detailedCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, 0);
                             int operationCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_OPERATION_CODE, 0);
