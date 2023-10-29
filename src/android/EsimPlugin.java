@@ -124,7 +124,7 @@ public class EsimPlugin extends CordovaPlugin implements ActivityEventListener {
                             public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
                               if (requestCode == resolutionRequestCode) {
                                 if (resultCode == Activity.RESULT_CANCELED) {
-                                  callbackContext.error("Error startResolutionActivity " );
+                                  callbackContext.error("Canceled by user" );
                                 } else if (resultCode == Activity.RESULT_OK) {
                                   callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
                                 }
