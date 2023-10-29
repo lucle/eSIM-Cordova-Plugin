@@ -4,6 +4,7 @@ import android.telephony.euicc.EuiccManager;
 import android.telephony.euicc.DownloadableSubscription;
 import android.telephony.TelephonyManager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
