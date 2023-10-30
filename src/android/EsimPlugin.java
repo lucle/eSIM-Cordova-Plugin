@@ -76,7 +76,7 @@ public class EsimPlugin extends CordovaPlugin{
         // Resolvable error, attempt to resolve it by a user action
         int resolutionRequestCode = 3;
         PendingIntent callbackIntent = PendingIntent.getBroadcast(
-            cordova.getContext(), 
+            mainContext, 
             resolutionRequestCode, 
             new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), 
             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
