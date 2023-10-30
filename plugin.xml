@@ -23,10 +23,30 @@
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">
-                <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-                <uses-permission android:name="android.permission.BIND_EUICC_SERVICE"/>
-                <uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS"/>
+            <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+            <uses-permission android:name="android.permission.BIND_EUICC_SERVICE" tools:ignore="ProtectedPermissions"/>
+            <uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS" tools:ignore="ProtectedPermissions"/>
         </config-file>    
+        <config-file parent="application" target="AndroidManifest.xml">
+                <activity android:name=".MyLuiActivity" android:exported="true" android:permission="android.permission.BIND_EUICC_SERVICE">
+                <intent-filter android:priority="100">
+                    <action android:name="android.service.euicc.action.MANAGE_EMBEDDED_SUBSCRIPTIONS" />
+                    <action android:name="android.service.euicc.action.PROVISION_EMBEDDED_SUBSCRIPTION" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <category android:name="android.service.euicc.category.EUICC_UI" />
+                </intent-filter>
+            </activity>
+            <service android:name=".CarrierEuiccProvisioningService" android:exported="true" android:permission="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS">
+                <intent-filter>
+                    <action android:name="android.service.euicc.action.BIND_CARRIER_PROVISIONING_SERVICE"/>
+                </intent-filter>
+            </service>
+            <service android:name=".EuiccServiceImpl" android:exported="true" android:permission="android.permission.BIND_EUICC_SERVICE">
+                <intent-filter android:priority="100">
+                    <action android:name="android.service.euicc.EuiccService" />
+                </intent-filter>
+            </service>
+        </config-file>0927318064
         <source-file src="src/android/EsimPlugin.java" target-dir="src/com/dreamcloud" />
     </platform>
 
