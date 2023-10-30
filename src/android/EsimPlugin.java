@@ -30,7 +30,7 @@ public class EsimPlugin extends CordovaPlugin{
     private Context mainContext;
     private EuiccManager mgr;
     
-    private static final String LPA_DECLARED_PERMISSION = "com.dreamcloud.lpa.permission.BROADCAST";
+    private static final String LPA_DECLARED_PERMISSION = "com.starhub.aduat.torpedo.lpa.permission.BROADCAST";
     String address;
     String matchingID;
     String activationCode ;
@@ -82,10 +82,16 @@ public class EsimPlugin extends CordovaPlugin{
             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         try{
             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode, intent, callbackIntent);
-        } catch (Exception e) {          
-            LOG.d(LOG_TAG, "Error startResolutionActivity " + e.getMessage());
-            callbackContext.error("Error startResolutionActivity "  + e.getMessage());    
-            callbackContext.sendPluginResult(new PluginResult(Status.ERROR));                 
+        } catch (Exception e) { 
+            int detailedCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, 0);
+            int operationCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_OPERATION_CODE, 0);
+            int errorCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_ERROR_CODE, 0);
+            String smdxSubjectCode = intent.getStringExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_SUBJECT_CODE);
+            String smdxReasonCode = intent.getStringExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_REASON_CODE);
+            callbackContext.error("Error startResolutionActivity - Can't add an Esim subscription: " + e.getLocalizedMessage() + " detailedCode=" + detailedCode + 
+                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode );
+
+            callbackContext.sendPluginResult(new PluginResult(Status.ERROR));             
         }
     }
 
@@ -110,26 +116,7 @@ public class EsimPlugin extends CordovaPlugin{
                     // If the result code is a resolvable error, call startResolutionActivity
                     if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {                      
                         // Resolvable error, attempt to resolve it by a user action
-                        int resolutionRequestCode = 3;
-                        PendingIntent callbackIntent = PendingIntent.getBroadcast(
-                            mainContext, 
-                            0, 
-                            new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), 
-                            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
-                        try{
-                            mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode, intent, callbackIntent);
-                        } catch (Exception e) {
-                            int detailedCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, 0);
-                            int operationCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_OPERATION_CODE, 0);
-                            int errorCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_ERROR_CODE, 0);
-                            String smdxSubjectCode = intent.getStringExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_SUBJECT_CODE);
-                            String smdxReasonCode = intent.getStringExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_REASON_CODE);
-                            callbackContext.error("Error startResolutionActivity - Can't add an Esim subscription: detailedCode=" + detailedCode + 
-                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode );
-                            LOG.d(LOG_TAG, "Error startResolutionActivity " + e.getLocalizedMessage());
-                            //callbackContext.error("Error startResolutionActivity "  + e.getMessage());    
-                            callbackContext.sendPluginResult(new PluginResult(Status.ERROR));                 
-                        }
+                        handleResolvableError(callbackContext, intent);                                        
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {
                         LOG.i(LOG_TAG, "EMBEDDED_SUBSCRIPTION_RESULT_OK " + String.valueOf(resultCode));     
                         callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
@@ -152,7 +139,7 @@ public class EsimPlugin extends CordovaPlugin{
             mainContext.registerReceiver(
                 receiver, 
                 new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), 
-                null , 
+                LPA_DECLARED_PERMISSION, 
                 null
             );
             
