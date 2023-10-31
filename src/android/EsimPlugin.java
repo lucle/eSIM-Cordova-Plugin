@@ -93,30 +93,9 @@ public class EsimPlugin extends CordovaPlugin{
                     int errorCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_ERROR_CODE,-1);
                     String smdxSubjectCode = intent.getStringExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_SUBJECT_CODE);
                     String smdxReasonCode = intent.getStringExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_REASON_CODE);
-
-                    if (operationCode == EuiccManager.OPERATION_DOWNLOAD && errorCode == EuiccManager.ERROR_CARRIER_LOCKED) {
-                            // handle specific error i.e tries to download but the device is carrier locked
-                            callbackContext.error("Final Result: to download but the device is carrier locked");
-                        } else if (operationCode == EuiccManager.OPERATION_SMDX) {
-                            // handle all SM-DP+/SM-DS errors
-                            callbackContext.error("Final Result: handle all SM-DP+/SM-DS errors");
-                        } else if (errorCode == EuiccManager.ERROR_TIME_OUT) {
-                            // handle all types of time out issues, regardless of operation.
-                            callbackContext.error("Final Result: regardless of operation.");
-                        } else if ("8.1".equals(smdxSubjectCode) && "3.1".equals(smdxReasonCode)) {
-                            // handle specific subject code and reason code: 8.1 and 4.1 means insufficient memory.
-                            callbackContext.error("Final Result: 8.1 and 4.1 means insufficient memory.");
-                        }
-                        else   if (errorCode == EuiccManager.ERROR_INVALID_ACTIVATION_CODE) {
-                            // handle specific subject code and reason code: 8.1 and 4.1 means insufficient memory.
-                            callbackContext.error("Final Result: ERROR_INVALID_ACTIVATION_CODE");
-                        }
-                        else   if (errorCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
-                            // handle specific subject code and reason code: 8.1 and 4.1 means insufficient memory.
-                            callbackContext.error("Final Result: ERROR_INVALID_ACTIVATION_CODE");
-                        
+                       
                     // If the result code is a resolvable error, call startResolutionActivity
-                    }else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {                      
+                    if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {                      
                         // Resolvable error, attempt to resolve it by a user action
                         int resolutionRequestCode = 3;
                         PendingIntent callbackIntent = PendingIntent.getBroadcast(
