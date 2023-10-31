@@ -140,7 +140,13 @@ public class EsimPlugin extends CordovaPlugin{
                 PendingIntent.FLAG_UPDATE_CURRENT |
                     PendingIntent.FLAG_MUTABLE);
         
-            mgr.downloadSubscription(sub, true, callbackIntent);            
+            mgr.downloadSubscription(sub, true, callbackIntent);        
+            String activationCode = sub.getConfirmationCode();
+            JSONObject result = new JSONObject();
+            result.put("activationCode: ", activationCode);
+            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
+            pluginResult.setKeepCallback(true);
+            callbackContext.sendPluginResult(pluginResult);
             //callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
         }catch (Exception e) {
             callbackContext.error("Error install eSIM "  + e.getMessage());
