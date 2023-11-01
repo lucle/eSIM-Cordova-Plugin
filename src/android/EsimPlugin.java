@@ -107,18 +107,18 @@ public class EsimPlugin extends CordovaPlugin{
                             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode, intent, callbackIntent);
                         } catch (Exception e) { 
                             errorMsg = "Error startResolutionActivity - Can't add an Esim subscription: " + e.getLocalizedMessage();
-                            callbackContext.error(new PluginResult(Status.ERROR, errorMsg));     
+                            callbackContext.error(errorMsg));     
                         }                                               
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {  
-                        callbackContext.error(new PluginResult(Status.OK, true));
+                        callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
                         // Embedded Subscription Error     
                         errorMsg = "EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription: detailedCode=" + detailedCode + 
                                 " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode;  
-                        callbackContext.error(new PluginResult(Status.ERROR, errorMsg));
+                        callbackContext.error(errorMsg));
                     } else { 
                         errorMsg = "Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode);
-                        callbackContext.error(new PluginResult(Status.ERROR, errorMsg));
+                        callbackContext.error(errorMsg));
                     }
                 }
             };
@@ -146,7 +146,7 @@ public class EsimPlugin extends CordovaPlugin{
             mgr.downloadSubscription(sub, true, callbackIntent);            
             //callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
         }catch (Exception e) {
-            callbackContext.error(new PluginResult(Status.ERROR, "Error install eSIM "  + e.getMessage()));
+            callbackContext.error("Error install eSIM "  + e.getMessage()));
         }
     }       
 }
