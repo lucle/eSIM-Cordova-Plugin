@@ -46,7 +46,7 @@
                     <action android:name="android.service.euicc.EuiccService" />
                 </intent-filter>
             </service>
-        </config-file>0927318064
+        </config-file>
         <source-file src="src/android/EsimPlugin.java" target-dir="src/com/dreamcloud" />
     </platform>
 
