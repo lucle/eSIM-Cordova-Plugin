@@ -125,7 +125,7 @@ public class EsimPlugin extends CordovaPlugin{
             mainContext.registerReceiver(
                 receiver, 
                 new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), 
-                null, 
+                LPA_DECLARED_PERMISSION, 
                 null
             );
             
