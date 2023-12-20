@@ -98,11 +98,11 @@ public class EsimPlugin extends CordovaPlugin{
                         int resolutionRequestCode = 0;
                         PendingIntent callbackIntent = PendingIntent.getBroadcast(
                             mainContext, 
-                            resolutionRequestCode, 
+                            resolutionRequestCode /* requestCode */, 
                             new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), 
                             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                         try{
-                            mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode, intent, callbackIntent);
+                            mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode /* requestCode */, intent, callbackIntent);
                         } catch (Exception e) { 
                             callbackContext.error("Error startResolutionActivity - Can't add an Esim subscription: " + e.getLocalizedMessage() + " detailedCode=" + detailedCode + 
                                 " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode );
@@ -122,25 +122,25 @@ public class EsimPlugin extends CordovaPlugin{
             mainContext.registerReceiver(
                 receiver, 
                 new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), 
-                null, 
-                null
+                LPA_DECLARED_PERMISSION /* broadcastPermission*/, 
+                null /* handler */
             );
             
             address = args.getString(0);
             matchingID = args.getString(1);
-            activationCode = "1$" + address + "$" + matchingID;
+            activationCode = "1\$" + address + "\$" + matchingID;
 
             // Download subscription asynchronously.
-            DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode);
+            DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode /* encodedActivationCode*/);
         
             PendingIntent callbackIntent = PendingIntent.getBroadcast(
                 mainContext,
-                1,
+                0 /* requestCode */,
                 new Intent(ACTION_DOWNLOAD_SUBSCRIPTION),
                 PendingIntent.FLAG_UPDATE_CURRENT |
                     PendingIntent.FLAG_MUTABLE);
         
-            mgr.downloadSubscription(sub, true, callbackIntent);  
+            mgr.downloadSubscription(sub, true /* switchAfterDownload */, callbackIntent);  
             //callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
         }catch (Exception e) {
             callbackContext.error("Error install eSIM "  + e.getMessage());
