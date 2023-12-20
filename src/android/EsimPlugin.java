@@ -16,14 +16,13 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
 import org.apache.cordova.PluginResult.Status;
-import org.apache.cordova.LOG;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class EsimPlugin extends CordovaPlugin{
-    protected static final String LOG_TAG = "eSIM";
+    
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
     private static final String INSTALL_ESIM = "installEsim";
     private static final String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
@@ -93,10 +92,10 @@ public class EsimPlugin extends CordovaPlugin{
                     int errorCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_ERROR_CODE,-1);
                     String smdxSubjectCode = intent.getStringExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_SUBJECT_CODE);
                     String smdxReasonCode = intent.getStringExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_REASON_CODE);
-                    // If the result code is a resolvable error, call startResolutionActivity
+
                     if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {                      
                         // Resolvable error, attempt to resolve it by a user action
-                        int resolutionRequestCode = 3;
+                        int resolutionRequestCode = 0;
                         PendingIntent callbackIntent = PendingIntent.getBroadcast(
                             mainContext, 
                             resolutionRequestCode, 
@@ -105,7 +104,7 @@ public class EsimPlugin extends CordovaPlugin{
                         try{
                             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode, intent, callbackIntent);
                         } catch (Exception e) { 
-                            callbackContext.error("Error startResolutionActivity - Can't add an Esim subscription: " + e.getLocalizedMessage() + "resultCode=" + String.valueOf(resultCode) + " detailedCode=" + detailedCode + 
+                            callbackContext.error("Error startResolutionActivity - Can't add an Esim subscription: " + e.getLocalizedMessage() + " detailedCode=" + detailedCode + 
                                 " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode );
                             callbackContext.sendPluginResult(new PluginResult(Status.ERROR));     
                         }                                               
@@ -113,12 +112,10 @@ public class EsimPlugin extends CordovaPlugin{
                         callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
                         // Embedded Subscription Error     
-                        callbackContext.error("EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription: resultCode=" + String.valueOf(resultCode) + " detailedCode=" + detailedCode + 
-                        " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode);
-                        callbackContext.sendPluginResult(new PluginResult(Status.ERROR));                       
+                        callbackContext.error("EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription: detailedCode=" + detailedCode + 
+                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode );  
                     } else { 
-                        callbackContext.error("Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode));
-                        callbackContext.sendPluginResult(new PluginResult(Status.ERROR));
+                        callbackContext.error("Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode)); 
                     }
                 }
             };
@@ -138,12 +135,12 @@ public class EsimPlugin extends CordovaPlugin{
         
             PendingIntent callbackIntent = PendingIntent.getBroadcast(
                 mainContext,
-                0,
+                1,
                 new Intent(ACTION_DOWNLOAD_SUBSCRIPTION),
                 PendingIntent.FLAG_UPDATE_CURRENT |
                     PendingIntent.FLAG_MUTABLE);
         
-            mgr.downloadSubscription(sub, true, callbackIntent);            
+            mgr.downloadSubscription(sub, true, callbackIntent);  
             //callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
         }catch (Exception e) {
             callbackContext.error("Error install eSIM "  + e.getMessage());
