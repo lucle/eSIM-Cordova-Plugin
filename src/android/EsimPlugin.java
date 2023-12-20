@@ -95,14 +95,13 @@ public class EsimPlugin extends CordovaPlugin{
 
                     if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {                      
                         // Resolvable error, attempt to resolve it by a user action
-                        int resolutionRequestCode = 0;
                         PendingIntent callbackIntent = PendingIntent.getBroadcast(
                             mainContext, 
-                            resolutionRequestCode /* requestCode */, 
+                            1 /* requestCode */, 
                             new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), 
                             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                         try{
-                            mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode /* requestCode */, intent, callbackIntent);
+                            mgr.startResolutionActivity(cordova.getActivity(), 0 /* requestCode */, intent, callbackIntent);
                         } catch (Exception e) { 
                             callbackContext.error("Error startResolutionActivity - Can't add an Esim subscription: " + e.getLocalizedMessage() + " detailedCode=" + detailedCode + 
                                 " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode );
