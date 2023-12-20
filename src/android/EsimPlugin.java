@@ -128,7 +128,7 @@ public class EsimPlugin extends CordovaPlugin{
             
             address = args.getString(0);
             matchingID = args.getString(1);
-            activationCode = "1\$" + address + "\$" + matchingID;
+            activationCode = "LPA:1$" + address + "$" + matchingID;
 
             // Download subscription asynchronously.
             DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode /* encodedActivationCode*/);
