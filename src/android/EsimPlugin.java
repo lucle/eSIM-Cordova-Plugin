@@ -73,10 +73,10 @@ public class EsimPlugin extends CordovaPlugin{
         try{
             initMgr();             
             
-            if (!checkCarrierPrivileges()) {
-                 callbackContext.error("No carrier privileges detected");
-                 return;
-            }
+            // if (!checkCarrierPrivileges()) {
+            //     callbackContext.error("No carrier privileges detected");
+            //     return;
+            // }
 
             BroadcastReceiver receiver = new BroadcastReceiver() {
                 @Override
