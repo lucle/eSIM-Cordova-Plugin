@@ -27,7 +27,9 @@
             <permission android:name="com.starhub.aduat.torpedo.lpa.permission.BROADCAST" android:label="my_permission" android:protectionLevel="signature"/>
             <uses-permission android:name="com.starhub.aduat.torpedo.lpa.permission.BROADCAST"/>
             <uses-permission android:name="android.permission.BIND_EUICC_SERVICE" tools:ignore="ProtectedPermissions"/>
-            <uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS" tools:ignore="ProtectedPermissions"/>
+            <uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS" tools:ignore="ProtectedPermissions"/>           
+        </config-file>
+        <config-file parent="application" target="AndroidManifest.xml">
             <service android:name=".SampleCarrierConfigService" android:exported="true" android:permission="android.permission.BIND_CARRIER_SERVICES">
                 <intent-filter>
                     <action android:name="android.service.carrier.ConfigService"/>
