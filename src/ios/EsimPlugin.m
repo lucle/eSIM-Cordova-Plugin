@@ -10,6 +10,7 @@
     if (@available(iOS 12.0, *)) {
         CTCellularPlanProvisioning *planProvisioning = [[CTCellularPlanProvisioning alloc] init];
         BOOL isEsimEnabled = [planProvisioning supportsCellularPlan];
+        NSLog(@"Is Support eSIM: %@",  isEsimEnabled);
         CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:isEsimEnabled];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     } else {
@@ -28,8 +29,21 @@
 
         if (@available(iOS 12, *)) {
             CTCellularPlanProvisioning *ctcp = [[CTCellularPlanProvisioning alloc] init];
+            NSLog(@"Starting install eSIM SMDP+: %@, matchingID: %@", ctpr.address, ctpr.matchingID);
             [ctcp addPlanWith:ctpr completionHandler:^(CTCellularPlanProvisioningAddPlanResult result) {
                 switch (result) {
+                    case CTCellularPlanProvisioningAddPlanResultUnknown:
+                        {
+                            CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @"Sorry unknown error."];
+                            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+                            break;
+                        }
+                    case CTCellularPlanProvisioningAddPlanResultFail:
+                        {
+                            CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @"Oops! something went wrong."];
+                            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+                            break;
+                        }
                     case CTCellularPlanProvisioningAddPlanResultSuccess:
                         {
                             CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool: YES];
@@ -38,7 +52,7 @@
                         }
                     default:
                         {
-                            CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool: NO];
+                            CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @"Oops! something went wrong."];
                             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
                             break;
                         }
