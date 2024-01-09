@@ -105,7 +105,7 @@ public class EsimPlugin extends CordovaPlugin{
                             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode /* requestCode */, intent, callbackIntent);
                         } catch (Exception e) { 
                             callbackContext.error("Error startResolutionActivity - Can't add an Esim subscription: " + e.getLocalizedMessage() + " detailedCode=" + detailedCode + 
-                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode );
+                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode + " matchingID=" + matchingID );
                             callbackContext.sendPluginResult(new PluginResult(Status.ERROR));     
                         }                                               
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {  
@@ -113,7 +113,7 @@ public class EsimPlugin extends CordovaPlugin{
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
                         // Embedded Subscription Error     
                         callbackContext.error("EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription: detailedCode=" + detailedCode + 
-                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode );  
+                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode + " matchingID=" + matchingID);  
                     } else { 
                         callbackContext.error("Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode)); 
                     }
