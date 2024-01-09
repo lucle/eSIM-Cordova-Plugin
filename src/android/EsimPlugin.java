@@ -25,6 +25,7 @@ public class EsimPlugin extends CordovaPlugin{
     
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
     private static final String INSTALL_ESIM = "installEsim";
+	private static final String INSTALL_ESIM_NEW = "installEsimNew";
     private static final String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
     private Context mainContext;
     private EuiccManager mgr;
@@ -45,6 +46,8 @@ public class EsimPlugin extends CordovaPlugin{
             hasEsimEnabled(callbackContext);
         }else if (INSTALL_ESIM.equals(action)) {   
             installEsim(args, callbackContext);
+		}else if (INSTALL_ESIM_NEW.equals(action)) {   
+            installEsimNew(args, callbackContext);
         }else {
             return false;
         }    
@@ -129,6 +132,83 @@ public class EsimPlugin extends CordovaPlugin{
             address = args.getString(0);
             matchingID = ReFormatString(args.getString(1), 4);
             activationCode = "1$" + address + "$" + matchingID;
+
+            // Download subscription asynchronously.
+            DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode /* encodedActivationCode*/);
+        
+            PendingIntent callbackIntent = PendingIntent.getBroadcast(
+                mainContext,
+                0 /* requestCode */,
+                new Intent(ACTION_DOWNLOAD_SUBSCRIPTION),
+                PendingIntent.FLAG_UPDATE_CURRENT |
+                    PendingIntent.FLAG_MUTABLE);
+        
+            mgr.downloadSubscription(sub, true /* switchAfterDownload */, callbackIntent);  
+            //callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
+        }catch (Exception e) {
+            callbackContext.error("Error install eSIM "  + e.getMessage());
+            callbackContext.sendPluginResult(new PluginResult(Status.ERROR));
+        }
+    }
+	
+	private void installEsimNew(JSONArray args, CallbackContext callbackContext) {         
+        try{
+            initMgr();             
+            
+            // if (!checkCarrierPrivileges()) {
+            //     callbackContext.error("No carrier privileges detected");
+            //     return;
+            // }
+
+            BroadcastReceiver receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (!ACTION_DOWNLOAD_SUBSCRIPTION.equals(intent.getAction())) {
+                        callbackContext.error("Can't setup eSim due to wrong Intent:" + intent.getAction() + " instead of " + ACTION_DOWNLOAD_SUBSCRIPTION); 
+                        return;
+                    }
+                    
+                    int resultCode = getResultCode();
+                    int detailedCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, 0);
+                    int operationCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_OPERATION_CODE,-1);
+                    int errorCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_ERROR_CODE,-1);
+                    String smdxSubjectCode = intent.getStringExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_SUBJECT_CODE);
+                    String smdxReasonCode = intent.getStringExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_REASON_CODE);
+
+                    if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {                      
+                        // Resolvable error, attempt to resolve it by a user action
+                        int resolutionRequestCode = 0;
+                        PendingIntent callbackIntent = PendingIntent.getBroadcast(
+                            mainContext, 
+                            resolutionRequestCode /* requestCode */, 
+                            new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), 
+                            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+                        try{
+                            mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode /* requestCode */, intent, callbackIntent);
+                        } catch (Exception e) { 
+                            callbackContext.error("Error startResolutionActivity - Can't add an Esim subscription: " + e.getLocalizedMessage() + " detailedCode=" + detailedCode + 
+                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode + " activationCode=" + activationCode);
+                            callbackContext.sendPluginResult(new PluginResult(Status.ERROR));     
+                        }                                               
+                    } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {  
+                        callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
+                    } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
+                        // Embedded Subscription Error     
+                        callbackContext.error("EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription: detailedCode=" + detailedCode + 
+                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode + " activationCode=" + activationCode);  
+                    } else { 
+                        callbackContext.error("Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode)); 
+                    }
+                }
+            };
+            mainContext.registerReceiver(
+                receiver, 
+                new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), 
+                LPA_DECLARED_PERMISSION /* broadcastPermission*/, 
+                null /* handler */
+            );
+            
+            activationCode = args.getString(0);
 
             // Download subscription asynchronously.
             DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode /* encodedActivationCode*/);
