@@ -69,8 +69,6 @@ public class EsimPlugin extends CordovaPlugin{
     private void hasEsimEnabled(CallbackContext callbackContext) {
         initMgr();
         boolean result = mgr.isEnabled();
-        EuiccInfo info = mgr.getEuiccInfo();
-        String osVer = info.getOsVersion();
         callbackContext.sendPluginResult(new PluginResult(Status.OK, result));
     }
     
