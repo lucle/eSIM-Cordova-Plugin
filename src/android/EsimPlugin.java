@@ -138,7 +138,6 @@ public class EsimPlugin extends CordovaPlugin{
 
             // Download subscription asynchronously.
             DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode /* encodedActivationCode*/);
-            Intent intent = new Intent(action).setPackage(context.getPackageName());
             PendingIntent callbackIntent = PendingIntent.getBroadcast(
                 mainContext,
                 0 /* requestCode */,
@@ -215,7 +214,7 @@ public class EsimPlugin extends CordovaPlugin{
 
             // Download subscription asynchronously.
             DownloadableSubscription sub = DownloadableSubscription.forActivationCode(activationCode /* encodedActivationCode*/);
-            Intent intent = new Intent(action).setPackage(mainContext.getPackageName());
+            Intent intent = new Intent(ACTION_DOWNLOAD_SUBSCRIPTION).setPackage(mainContext.getPackageName());
             PendingIntent callbackIntent = PendingIntent.getBroadcast(
                 mainContext,
                 0 /* requestCode */,
