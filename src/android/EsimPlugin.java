@@ -60,10 +60,14 @@ public class EsimPlugin extends CordovaPlugin{
         }
     }
 
-    private boolean checkCarrierPrivileges() {
+    private void checkCarrierPrivileges() {
         TelephonyManager telephonyManager  = (TelephonyManager) mainContext.getSystemService(Context.TELEPHONY_SERVICE);
         boolean isCarrier = telephonyManager.hasCarrierPrivileges();
-        return isCarrier;
+        if (!isCarrier)
+        {
+            callbackContext.error("No carrier privileges detected");
+        }
+
     }
 
     private void hasEsimEnabled(CallbackContext callbackContext) {
@@ -81,7 +85,7 @@ public class EsimPlugin extends CordovaPlugin{
             //     callbackContext.error("No carrier privileges detected");
             //     return;
             // }
-
+            checkCarrierPrivileges();
             BroadcastReceiver receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
@@ -96,7 +100,7 @@ public class EsimPlugin extends CordovaPlugin{
                     int errorCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_ERROR_CODE,-1);
                     String smdxSubjectCode = intent.getStringExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_SUBJECT_CODE);
                     String smdxReasonCode = intent.getStringExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_REASON_CODE);
-
+                    
                     if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {                      
                         // Resolvable error, attempt to resolve it by a user action
                         int resolutionRequestCode = 0;
