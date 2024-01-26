@@ -167,7 +167,7 @@ public class EsimPlugin extends CordovaPlugin{
                         callbackContext.error("Can't setup eSim due to wrong Intent:" + intent.getAction() + " instead of " + ACTION_DOWNLOAD_SUBSCRIPTION); 
                         return;
                     }
-                    
+                    boolean hasCarrierPrivileges = checkCarrierPrivileges();
                     int resultCode = getResultCode();
                     int detailedCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, 0);
                     int operationCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_OPERATION_CODE,-1);
@@ -187,7 +187,7 @@ public class EsimPlugin extends CordovaPlugin{
                             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode /* requestCode */, intent, callbackIntent);
                         } catch (Exception e) { 
                             callbackContext.error("Error startResolutionActivity - Can't add an Esim subscription: " + e.getLocalizedMessage() + " detailedCode=" + detailedCode + 
-                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode + " activationCode=" + activationCode);
+                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode + " activationCode=" + activationCod + " hasCarrierPrivileges" + hasCarrierPrivileges);
                             callbackContext.sendPluginResult(new PluginResult(Status.ERROR));     
                         }                                               
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {  
@@ -195,9 +195,8 @@ public class EsimPlugin extends CordovaPlugin{
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
                         // Embedded Subscription Error     
                         callbackContext.error("EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription: detailedCode=" + detailedCode + 
-                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode + " activationCode=" + activationCode);  
-                    } else { 
-                        callbackContext.error("Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode)); 
+                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode + " activationCode=" + activationCode + " hasCarrierPrivileges" + hasCarrierPrivileges);
+                        callbackContext.error("Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode) + " hasCarrierPrivileges" + hasCarrierPrivileges);
                     }
                 }
             };
