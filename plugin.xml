@@ -32,7 +32,7 @@
         <config-file parent="application" target="AndroidManifest.xml">
             <service android:name=".SampleCarrierConfigService" android:exported="true" android:permission="android.permission.BIND_CARRIER_SERVICES">
                 <intent-filter>
-                    <action android:name="android.service.carrier.ConfigService"/>
+                    <action android:name="android.service.carrier.CarrierService"/>
                 </intent-filter>
             </service>
         </config-file>    
