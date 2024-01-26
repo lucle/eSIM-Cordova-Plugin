@@ -85,7 +85,7 @@ public class EsimPlugin extends CordovaPlugin{
             //     callbackContext.error("No carrier privileges detected");
             //     return;
             // }
-            checkCarrierPrivileges();
+            checkCarrierPrivileges(callbackContext);
             BroadcastReceiver receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
