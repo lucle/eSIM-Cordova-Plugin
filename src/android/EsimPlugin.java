@@ -60,15 +60,10 @@ public class EsimPlugin extends CordovaPlugin{
         }
     }
 
-    private void checkCarrierPrivileges(CallbackContext callbackContext) {
+    private boolean checkCarrierPrivileges() {
         TelephonyManager telephonyManager  = (TelephonyManager) mainContext.getSystemService(Context.TELEPHONY_SERVICE);
         boolean isCarrier = telephonyManager.hasCarrierPrivileges();
-        if (!isCarrier)
-        {
-            callbackContext.error("No carrier privileges detected");
-            callbackContext.sendPluginResult(new PluginResult(Status.ERROR));     
-
-        }
+        return isCarrier
 
     }
 
@@ -87,7 +82,6 @@ public class EsimPlugin extends CordovaPlugin{
             //     callbackContext.error("No carrier privileges detected");
             //     return;
             // }
-            checkCarrierPrivileges(callbackContext);
             BroadcastReceiver receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
@@ -95,7 +89,7 @@ public class EsimPlugin extends CordovaPlugin{
                         callbackContext.error("Can't setup eSim due to wrong Intent:" + intent.getAction() + " instead of " + ACTION_DOWNLOAD_SUBSCRIPTION); 
                         return;
                     }
-                    
+                    boolean hasCarrierPrivileges = checkCarrierPrivileges();
                     int resultCode = getResultCode();
                     int detailedCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, 0);
                     int operationCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_OPERATION_CODE,-1);
@@ -115,7 +109,7 @@ public class EsimPlugin extends CordovaPlugin{
                             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode /* requestCode */, intent, callbackIntent);
                         } catch (Exception e) { 
                             callbackContext.error("Error startResolutionActivity - Can't add an Esim subscription: " + e.getLocalizedMessage() + " detailedCode=" + detailedCode + 
-                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode + " activationCode=" + activationCode);
+                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode + " activationCode=" + activationCode + " hasCarrierPrivileges" + hasCarrierPrivileges);
                             callbackContext.sendPluginResult(new PluginResult(Status.ERROR));     
                         }                                               
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {  
@@ -123,9 +117,9 @@ public class EsimPlugin extends CordovaPlugin{
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
                         // Embedded Subscription Error     
                         callbackContext.error("EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription: detailedCode=" + detailedCode + 
-                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode + " activationCode=" + activationCode);  
+                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode + " activationCode=" + activationCode + " hasCarrierPrivileges" + hasCarrierPrivileges);
                     } else { 
-                        callbackContext.error("Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode)); 
+                        callbackContext.error("Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode) + " hasCarrierPrivileges" + hasCarrierPrivileges);
                     }
                 }
             };
