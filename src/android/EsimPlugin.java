@@ -66,6 +66,8 @@ public class EsimPlugin extends CordovaPlugin{
         if (!isCarrier)
         {
             callbackContext.error("No carrier privileges detected");
+            callbackContext.sendPluginResult(new PluginResult(Status.ERROR));     
+
         }
 
     }
