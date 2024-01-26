@@ -187,7 +187,7 @@ public class EsimPlugin extends CordovaPlugin{
                             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode /* requestCode */, intent, callbackIntent);
                         } catch (Exception e) { 
                             callbackContext.error("Error startResolutionActivity - Can't add an Esim subscription: " + e.getLocalizedMessage() + " detailedCode=" + detailedCode + 
-                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode + " activationCode=" + activationCod + " hasCarrierPrivileges" + hasCarrierPrivileges);
+                                " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode + " activationCode=" + activationCode + " hasCarrierPrivileges" + hasCarrierPrivileges);
                             callbackContext.sendPluginResult(new PluginResult(Status.ERROR));     
                         }                                               
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {  
