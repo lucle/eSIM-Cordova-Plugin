@@ -181,7 +181,7 @@ public class EsimPlugin extends CordovaPlugin{
                         PendingIntent callbackIntent = PendingIntent.getBroadcast(
                             mainContext, 
                             resolutionRequestCode /* requestCode */, 
-                            new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), 
+                            intent, 
                             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                         try{
                             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode /* requestCode */, intent, callbackIntent);
