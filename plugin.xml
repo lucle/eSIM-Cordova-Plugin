@@ -24,7 +24,7 @@
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-            <permission android:name="com.starhub.aduat.torpedo.lpa.permission.BROADCAST" android:label="my_permission" android:protectionLevel="signature"/>
+            <permission android:protectionLevel="signature" android:name="com.starhub.aduat.torpedo.lpa.permission.BROADCAST" />
             <uses-permission android:name="com.starhub.aduat.torpedo.lpa.permission.BROADCAST"/>
             <uses-permission android:name="android.permission.BIND_EUICC_SERVICE" tools:ignore="ProtectedPermissions"/>
             <uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS" tools:ignore="ProtectedPermissions"/>           
@@ -33,6 +33,12 @@
             <service android:name=".SampleCarrierConfigService" android:exported="true" android:permission="android.permission.BIND_CARRIER_SERVICES">
                 <intent-filter>
                     <action android:name="android.service.carrier.CarrierService"/>
+                </intent-filter>
+                <intent-filter><action android:name="android.intent.action.DOWNLOAD_SUBSCRIPTION" />
+                    <category android:name="android.intent.category.DEFAULT" /
+                ></intent-filter> 
+                <intent-filter><action android:name="android.intent.action.SWITCH_TO_SUBSCRIPTION" /
+                    ><category android:name="android.intent.category.DEFAULT" />
                 </intent-filter>
             </service>
         </config-file>    
