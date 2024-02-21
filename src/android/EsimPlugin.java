@@ -101,9 +101,9 @@ public class EsimPlugin extends CordovaPlugin{
                         // Resolvable error, attempt to resolve it by a user action
                         int resolutionRequestCode = 0;
                         PendingIntent callbackIntent = PendingIntent.getBroadcast(
-                            mainContext, 
+                            getContext(), 
                             resolutionRequestCode /* requestCode */, 
-                            new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), 
+                            intent, 
                             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                         try{
                             mgr.startResolutionActivity(cordova.getActivity(), resolutionRequestCode /* requestCode */, intent, callbackIntent);
@@ -196,7 +196,7 @@ public class EsimPlugin extends CordovaPlugin{
                         callbackContext.sendPluginResult(new PluginResult(Status.OK, true));
                     } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
                         // Embedded Subscription Error     
-                        callbackContext.error("Error startResolutionActivity - Can't add an Esim subscription: " + " detailedCode=" + detailedCode + 
+                        callbackContext.error("Error Embedded Subscription Error - Can't add an Esim subscription: " + " detailedCode=" + detailedCode + 
                         " operationCode=" + operationCode + " errorCode=" + errorCode + " smdxSubjectCode=" + smdxSubjectCode + " smdxReasonCode=" + smdxReasonCode + " activationCode=" + activationCode + 
                         " hasCarrierPrivileges:" + hasCarrierPrivileges + " package Name = " + packageName);
                         callbackContext.error("Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode) + " hasCarrierPrivileges" + hasCarrierPrivileges);

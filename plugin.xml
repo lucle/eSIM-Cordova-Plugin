@@ -34,6 +34,8 @@
                 <intent-filter>
                     <action android:name="android.service.carrier.CarrierService"/>
                 </intent-filter>
+            </service>
+            <activity>
                 <intent-filter>
                     <action android:name="android.intent.action.DOWNLOAD_SUBSCRIPTION" />
                     <category android:name="android.intent.category.DEFAULT" />
@@ -42,7 +44,7 @@
                     <action android:name="android.intent.action.SWITCH_TO_SUBSCRIPTION" />
                     <category android:name="android.intent.category.DEFAULT" />
                 </intent-filter>
-            </service>
+            </activity>
         </config-file>
         <source-file src="src/android/EsimPlugin.java" target-dir="src/com/dreamcloud" />
     </platform>
