@@ -27,27 +27,22 @@ public class EsimPlugin extends CordovaPlugin{
     private static final String START_RESOLUTION_ACTION = "start_resolution_action";
     private static final String BROADCAST_PERMISSION = "com.starhub.aduat.torpedo.lpa.permission.BROADCAST";
 
-    private EuiccManager manager;
-
     // eSIM Constants //
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
     private static final String INSTALL_ESIM = "installEsim";
 	private static final String INSTALL_ESIM_NEW = "installEsimNew";
-    // FUNCTIONS //
+    
+    // Variables
+    private EuiccManager manager;
+    private Context context;
 
-    // Initiate Manager
-    private void initMgr() {
-        if (manager == null) {
-            manager = (EuiccManager) mainContext.getSystemService(Context.EUICC_SERVICE);
-        }
+    // Overrides //
+    @Override
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        super.initialize(cordova, webView);
+        context = this.cordova.getActivity().getApplicationContext();
     }
-    // e-Sim compatibility check
-    private void isSupportEsim(CallbackContext callbackContext) {
-        initMgr();
-        boolean result = manager.isEnabled();
-        callbackContext.sendPluginResult(new PluginResult(Status.OK, result));
-    }
-    // 
+
     @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
         if (HAS_ESIM_ENABLED.equals(action)) {
@@ -61,7 +56,7 @@ public class EsimPlugin extends CordovaPlugin{
         }    
         return true;
     }
-        /**
+     /**
      * Register the broadcast receivers
      */
     @Override
@@ -92,9 +87,25 @@ public class EsimPlugin extends CordovaPlugin{
         unregisterReceiver(eSimBroadcastReceiver);
         unregisterReceiver(resolutionReceiver);
     };
+    // FUNCTIONS //
+
+    // Initiate Manager
+    private void initMgr() {
+        if (manager == null) {
+            manager = (EuiccManager) context.getSystemService(Context.EUICC_SERVICE);
+        }
+    }
+    // e-Sim compatibility check
+    private void isSupportEsim(CallbackContext callbackContext) {
+        initMgr();
+        boolean result = manager.isEnabled();
+        callbackContext.sendPluginResult(new PluginResult(Status.OK, result));
+    }
+    // 
+
 
     private boolean checkCarrierPrivileges() {
-        TelephonyManager telephonyManager  = (TelephonyManager) mainContext.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager telephonyManager  = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         boolean isCarrier = telephonyManager.hasCarrierPrivileges();
         return isCarrier;
 
@@ -107,7 +118,7 @@ public class EsimPlugin extends CordovaPlugin{
             new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    if (!action.equals(intent.getAction())) {
+                    if (!DOWNLOAD_ACTION.equals(intent.getbro())) {
                         callbackContext.error("Can't setup eSim due to wrong Intent:" + intent.getAction() + " instead of " + ACTION_DOWNLOAD_SUBSCRIPTION); 
                         return;
                     }
@@ -123,13 +134,14 @@ public class EsimPlugin extends CordovaPlugin{
 
                     // If the result code is a resolvable error, call startResolutionActivity
                     if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR) {
+                        int resolutionRequestCode = 0;
                         PendingIntent callbackIntent = PendingIntent.getBroadcast(
-                            getContext(), 0 /* requestCode */, intent,
+                            cordova.getContext(), resolutionRequestCode /* requestCode */, intent,
                             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                         try {
                             manager.startResolutionActivity(
-                            activity,
-                            0 /* requestCode */,
+                            cordova.getActivity(),
+                            resolutionRequestCode /* requestCode */,
                             intent,
                             callbackIntent);
                         }
