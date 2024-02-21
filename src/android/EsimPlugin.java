@@ -23,11 +23,11 @@ import org.json.JSONObject;
 
 public class EsimPlugin extends CordovaPlugin{
     // CONSTANTS //
-    private static final String DOWNLOAD_ACTION = "download_subscription"
-    private static final String START_RESOLUTION_ACTION = "start_resolution_action"
+    private static final String DOWNLOAD_ACTION = "download_subscription";
+    private static final String START_RESOLUTION_ACTION = "start_resolution_action";
     private static final String BROADCAST_PERMISSION = "com.starhub.aduat.torpedo.lpa.permission.BROADCAST";
 
-    private var manager: EuiccManager? = null
+    private var manager: EuiccManager? = null;
 
     // eSIM Constants //
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
@@ -67,18 +67,18 @@ public class EsimPlugin extends CordovaPlugin{
     @Override
     protected void onStart()
     {
-        super.onStart()
+        super.onStart();
         registerReceiver(
             eSimBroadcastReceiver,
             IntentFilter(DOWNLOAD_ACTION),
             BROADCAST_PERMISSION,
-            null
+            null;
         )
         registerReceiver(
             resolutionReceiver,
             IntentFilter(START_RESOLUTION_ACTION),
             BROADCAST_PERMISSION,
-            null
+            null;
         )
     };
 
@@ -88,9 +88,9 @@ public class EsimPlugin extends CordovaPlugin{
     @Override
     protected void onStop()
     {
-        super.onStop()
-        unregisterReceiver(eSimBroadcastReceiver)
-        unregisterReceiver(resolutionReceiver)
+        super.onStop();
+        unregisterReceiver(eSimBroadcastReceiver);
+        unregisterReceiver(resolutionReceiver);
     };
 
     private boolean checkCarrierPrivileges() {
