@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        id="cordova-plugin-esim" version="0.0.1" xmlns:tools="http://schemas.android.com/tools">
+    xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-esim" version="0.0.1"
+    xmlns:tools="http://schemas.android.com/tools">
     <name>EsimPlugin</name>
 
     <description>An Android Cordova plugin that checks is esim is supported</description>
@@ -27,21 +27,23 @@
             <permission android:protectionLevel="signature" android:name="com.starhub.aduat.torpedo.lpa.permission.BROADCAST" />
             <uses-permission android:name="com.starhub.aduat.torpedo.lpa.permission.BROADCAST"/>
             <uses-permission android:name="android.permission.BIND_EUICC_SERVICE" tools:ignore="ProtectedPermissions"/>
-            <uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS" tools:ignore="ProtectedPermissions"/>           
+            <uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS" tools:ignore="ProtectedPermissions"/>
         </config-file>
         <config-file parent="application" target="AndroidManifest.xml">
             <service android:name=".SampleCarrierConfigService" android:exported="true" android:permission="android.permission.BIND_CARRIER_SERVICES">
                 <intent-filter>
                     <action android:name="android.service.carrier.CarrierService"/>
                 </intent-filter>
-                <intent-filter><action android:name="android.intent.action.DOWNLOAD_SUBSCRIPTION" />
-                    <category android:name="android.intent.category.DEFAULT" /
-                ></intent-filter> 
-                <intent-filter><action android:name="android.intent.action.SWITCH_TO_SUBSCRIPTION" /
-                    ><category android:name="android.intent.category.DEFAULT" />
+                <intent-filter>
+                    <action android:name="android.intent.action.DOWNLOAD_SUBSCRIPTION" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                </intent-filter>
+                <intent-filter>
+                    <action android:name="android.intent.action.SWITCH_TO_SUBSCRIPTION" />
+                    <category android:name="android.intent.category.DEFAULT" />
                 </intent-filter>
             </service>
-        </config-file>    
+        </config-file>
         <source-file src="src/android/EsimPlugin.java" target-dir="src/com/dreamcloud" />
     </platform>
 
