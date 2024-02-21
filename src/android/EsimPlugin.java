@@ -27,7 +27,7 @@ public class EsimPlugin extends CordovaPlugin{
     private static final String START_RESOLUTION_ACTION = "start_resolution_action";
     private static final String BROADCAST_PERMISSION = "com.starhub.aduat.torpedo.lpa.permission.BROADCAST";
 
-    private var manager: EuiccManager? = null;
+    private EuiccManager manager;
 
     // eSIM Constants //
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
@@ -72,14 +72,14 @@ public class EsimPlugin extends CordovaPlugin{
             eSimBroadcastReceiver,
             IntentFilter(DOWNLOAD_ACTION),
             BROADCAST_PERMISSION,
-            null;
-        )
+            null
+        );
         registerReceiver(
             resolutionReceiver,
             IntentFilter(START_RESOLUTION_ACTION),
             BROADCAST_PERMISSION,
-            null;
-        )
+            null
+        );
     };
 
     /**
