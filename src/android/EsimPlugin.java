@@ -35,7 +35,7 @@ public class EsimPlugin extends CordovaPlugin{
     // Variables
     private EuiccManager manager;
     private Context context;
-
+    String activationCode ;
     // Overrides //
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -118,7 +118,7 @@ public class EsimPlugin extends CordovaPlugin{
             new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    if (!DOWNLOAD_ACTION.equals(intent.getbro())) {
+                    if (!DOWNLOAD_ACTION.equals(intent.getAction())) {
                         callbackContext.error("Can't setup eSim due to wrong Intent:" + intent.getAction() + " instead of " + ACTION_DOWNLOAD_SUBSCRIPTION); 
                         return;
                     }
@@ -129,14 +129,15 @@ public class EsimPlugin extends CordovaPlugin{
                     int errorCode = intent.getIntExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_ERROR_CODE,0);
                     String smdxSubjectCode = intent.getStringExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_SUBJECT_CODE);
                     String smdxReasonCode = intent.getStringExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_REASON_CODE);
-                    String packageName = mainContext.getPackageName();
+                    String packageName = context.getPackageName();
                     boolean hasCarrierPrivileges = checkCarrierPrivileges();
 
                     // If the result code is a resolvable error, call startResolutionActivity
                     if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR) {
                         int resolutionRequestCode = 0;
+                        val startIntent = Intent(START_RESOLUTION_ACTION)
                         PendingIntent callbackIntent = PendingIntent.getBroadcast(
-                            cordova.getContext(), resolutionRequestCode /* requestCode */, intent,
+                            cordova.getContext(), resolutionRequestCode /* requestCode */, startIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                         try {
                             manager.startResolutionActivity(
@@ -169,11 +170,13 @@ public class EsimPlugin extends CordovaPlugin{
                     BROADCAST_PERMISSION /* broadcastPermission*/,
                     null /* handler */);
             // Download subscription asynchronously.
+            activationCode = args.getString(0);
+
             DownloadableSubscription sub = DownloadableSubscription
             .forActivationCode(code /* encodedActivationCode*/);
-            Intent intent = new Intent(action).setPackage(context.getPackageName());
+            Intent intent = new Intent(DOWNLOAD_ACTION).setPackage(context.getPackageName());
             PendingIntent callbackIntent = PendingIntent.getBroadcast(
-            getContext(), 0 /* requestCode */, intent,
+            cordova.getContext(), 0 /* requestCode */, intent,
             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
             manager.downloadSubscription(sub, true /* switchAfterDownload */,
             callbackIntent);
