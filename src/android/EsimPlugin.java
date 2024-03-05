@@ -42,79 +42,17 @@ public class EsimPlugin extends CordovaPlugin{
         super.initialize(cordova, webView);
         context = this.cordova.getActivity().getApplicationContext();
     }
-
-    @Override
-    public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
-        if (HAS_ESIM_ENABLED.equals(action)) {
-            hasEsimEnabled(callbackContext);
-        }else if (INSTALL_ESIM.equals(action)) {   
-            installEsim(args, callbackContext);
-		}else if (INSTALL_ESIM_NEW.equals(action)) {   
-            installEsimNew(args, callbackContext);
-        }else {
-            return false;
-        }    
-        return true;
-    }
-     /**
-     * Register the broadcast receivers
-     */
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-        registerReceiver(
-            eSimBroadcastReceiver,
-            IntentFilter(DOWNLOAD_ACTION),
-            BROADCAST_PERMISSION,
-            null
-        );
-        registerReceiver(
-            resolutionReceiver,
-            IntentFilter(START_RESOLUTION_ACTION),
-            BROADCAST_PERMISSION,
-            null
-        );
-    };
-
-    /**
-     * Un-Register the broadcast receivers
-     */
-    @Override
-    protected void onStop()
-    {
-        super.onStop();
-        unregisterReceiver(eSimBroadcastReceiver);
-        unregisterReceiver(resolutionReceiver);
-    };
-    // FUNCTIONS //
-
-    // Initiate Manager
-    private void initMgr() {
-        if (manager == null) {
-            manager = (EuiccManager) context.getSystemService(Context.EUICC_SERVICE);
-        }
-    }
-    // e-Sim compatibility check
-    private void isSupportEsim(CallbackContext callbackContext) {
+    // check has eSimEnabled
+    private void hasEsimEnabled(CallbackContext callbackContext) {
         initMgr();
-        boolean result = manager.isEnabled();
+        boolean result = mgr.isEnabled();
         callbackContext.sendPluginResult(new PluginResult(Status.OK, result));
     }
-    // 
 
-
-    private boolean checkCarrierPrivileges() {
-        TelephonyManager telephonyManager  = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        boolean isCarrier = telephonyManager.hasCarrierPrivileges();
-        return isCarrier;
-
-    }
-
-	private void installEsimNew(JSONArray args, CallbackContext callbackContext)  
+    private void installEsimNew(JSONArray args, CallbackContext callbackContext)  
     {
         try {
-            BroadcastReceiver receiver =
+            BroadcastReceiver eSimBroadcastReceiver =
             new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
@@ -135,9 +73,8 @@ public class EsimPlugin extends CordovaPlugin{
                     // If the result code is a resolvable error, call startResolutionActivity
                     if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR) {
                         int resolutionRequestCode = 0;
-                        val startIntent = Intent(START_RESOLUTION_ACTION);
                         PendingIntent callbackIntent = PendingIntent.getBroadcast(
-                            cordova.getContext(), resolutionRequestCode /* requestCode */, startIntent,
+                            cordova.getContext(), resolutionRequestCode /* requestCode */, intent,
                             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                         try {
                             manager.startResolutionActivity(
@@ -165,7 +102,7 @@ public class EsimPlugin extends CordovaPlugin{
                     resultIntent = intent;
                 }
             };
-            context.registerReceiver(receiver,
+            context.registerReceiver(eSimBroadcastReceiver,
                     new IntentFilter(DOWNLOAD_ACTION),
                     BROADCAST_PERMISSION /* broadcastPermission*/,
                     null /* handler */);
@@ -173,7 +110,7 @@ public class EsimPlugin extends CordovaPlugin{
             activationCode = args.getString(0);
 
             DownloadableSubscription sub = DownloadableSubscription
-            .forActivationCode(code /* encodedActivationCode*/);
+            .forActivationCode(activationCode /* encodedActivationCode*/);
             Intent intent = new Intent(DOWNLOAD_ACTION).setPackage(context.getPackageName());
             PendingIntent callbackIntent = PendingIntent.getBroadcast(
             cordova.getContext(), 0 /* requestCode */, intent,
@@ -185,5 +122,73 @@ public class EsimPlugin extends CordovaPlugin{
             callbackContext.sendPluginResult(new PluginResult(Status.ERROR));
         }
     }
+
+    @Override
+    public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
+        if (HAS_ESIM_ENABLED.equals(action)) {
+            hasEsimEnabled(callbackContext);
+		}else if (INSTALL_ESIM_NEW.equals(action)) {   
+            installEsimNew(args, callbackContext);
+        }else {
+            return false;
+        }    
+        return true;
+    }
+     /**
+     * Register the broadcast receivers
+     */
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        registerReceiver(
+            eSimBroadcastReceiver,
+            DOWNLOAD_ACTION,
+            BROADCAST_PERMISSION,
+            null
+        );
+        registerReceiver(
+            resolutionReceiver,
+            START_RESOLUTION_ACTION,
+            BROADCAST_PERMISSION,
+            null
+        );
+    };
+
+    /**
+     * Un-Register the broadcast receivers
+     */
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        unregisterReceiver(eSimBroadcastReceiver);
+        unregisterReceiver(resolutionReceiver);
+    };
+    // FUNCTIONS //
+
+    // Initiate Manager
+    private void initMgr() {
+        if (manager == null) {
+            manager = (EuiccManager) context.getSystemService(Context.EUICC_SERVICE);
+        }
+    }
+
+    // e-Sim compatibility check
+    private void isSupportEsim(CallbackContext callbackContext) {
+        initMgr();
+        boolean result = manager.isEnabled();
+        callbackContext.sendPluginResult(new PluginResult(Status.OK, result));
+    }
+
+    // check Carrier Privileges
+    private boolean checkCarrierPrivileges() {
+        TelephonyManager telephonyManager  = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        boolean isCarrier = telephonyManager.hasCarrierPrivileges();
+        return isCarrier;
+
+    }
+
+
 
 }
