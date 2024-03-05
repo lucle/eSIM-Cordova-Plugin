@@ -139,7 +139,7 @@ public class EsimPlugin extends CordovaPlugin{
      * Register the broadcast receivers
      */
     @Override
-    public onStart()
+    public void onStart()
     {
         super.onStart();
         registerReceiver(
@@ -160,7 +160,7 @@ public class EsimPlugin extends CordovaPlugin{
      * Un-Register the broadcast receivers
      */
     @Override
-    public onStop()
+    public void onStop()
     {
         super.onStop();
         unregisterReceiver(eSimBroadcastReceiver);
