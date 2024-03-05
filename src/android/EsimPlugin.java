@@ -36,6 +36,7 @@ public class EsimPlugin extends CordovaPlugin{
     private EuiccManager manager;
     private Context context;
     String activationCode ;
+    private BroadcastReceiver eSimBroadcastReceiver;
     // Overrides //
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -45,19 +46,19 @@ public class EsimPlugin extends CordovaPlugin{
     // check has eSimEnabled
     private void hasEsimEnabled(CallbackContext callbackContext) {
         initMgr();
-        boolean result = mgr.isEnabled();
+        boolean result = manager.isEnabled();
         callbackContext.sendPluginResult(new PluginResult(Status.OK, result));
     }
 
     private void installEsimNew(JSONArray args, CallbackContext callbackContext)  
     {
         try {
-            BroadcastReceiver eSimBroadcastReceiver =
+            eSimBroadcastReceiver =
             new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     if (!DOWNLOAD_ACTION.equals(intent.getAction())) {
-                        callbackContext.error("Can't setup eSim due to wrong Intent:" + intent.getAction() + " instead of " + ACTION_DOWNLOAD_SUBSCRIPTION); 
+                        callbackContext.error("Can't setup eSim due to wrong Intent:" + intent.getAction() + " instead of " + DOWNLOAD_ACTION); 
                         return;
                     }
 
@@ -138,7 +139,7 @@ public class EsimPlugin extends CordovaPlugin{
      * Register the broadcast receivers
      */
     @Override
-    protected void onStart()
+    public onStart()
     {
         super.onStart();
         registerReceiver(
@@ -147,23 +148,23 @@ public class EsimPlugin extends CordovaPlugin{
             BROADCAST_PERMISSION,
             null
         );
-        registerReceiver(
-            resolutionReceiver,
-            START_RESOLUTION_ACTION,
-            BROADCAST_PERMISSION,
-            null
-        );
+        // registerReceiver(
+        //     resolutionReceiver,
+        //     START_RESOLUTION_ACTION,
+        //     BROADCAST_PERMISSION,
+        //     null
+        // );
     };
 
     /**
      * Un-Register the broadcast receivers
      */
     @Override
-    protected void onStop()
+    public onStop()
     {
         super.onStop();
         unregisterReceiver(eSimBroadcastReceiver);
-        unregisterReceiver(resolutionReceiver);
+        // unregisterReceiver(resolutionReceiver);
     };
     // FUNCTIONS //
 
