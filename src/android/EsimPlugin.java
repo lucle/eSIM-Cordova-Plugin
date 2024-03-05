@@ -99,8 +99,6 @@ public class EsimPlugin extends CordovaPlugin{
                         " hasCarrierPrivileges:" + hasCarrierPrivileges + " package Name = " + packageName);
                         callbackContext.error("Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode) + " hasCarrierPrivileges" + hasCarrierPrivileges);
                     }
-
-                    resultIntent = intent;
                 }
             };
             context.registerReceiver(eSimBroadcastReceiver,
@@ -135,37 +133,37 @@ public class EsimPlugin extends CordovaPlugin{
         }    
         return true;
     }
-     /**
-     * Register the broadcast receivers
-     */
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        registerReceiver(
-            eSimBroadcastReceiver,
-            DOWNLOAD_ACTION,
-            BROADCAST_PERMISSION,
-            null
-        );
-        // registerReceiver(
-        //     resolutionReceiver,
-        //     START_RESOLUTION_ACTION,
-        //     BROADCAST_PERMISSION,
-        //     null
-        // );
-    };
+    //  /**
+    //  * Register the broadcast receivers
+    //  */
+    // @Override
+    // public void onStart()
+    // {
+    //     super.onStart();
+    //     registerReceiver(
+    //         eSimBroadcastReceiver,
+    //         DOWNLOAD_ACTION,
+    //         BROADCAST_PERMISSION,
+    //         null
+    //     );
+    //     // registerReceiver(
+    //     //     resolutionReceiver,
+    //     //     START_RESOLUTION_ACTION,
+    //     //     BROADCAST_PERMISSION,
+    //     //     null
+    //     // );
+    // };
 
-    /**
-     * Un-Register the broadcast receivers
-     */
-    @Override
-    public void onStop()
-    {
-        super.onStop();
-        unregisterReceiver(eSimBroadcastReceiver);
-        // unregisterReceiver(resolutionReceiver);
-    };
+    // /**
+    //  * Un-Register the broadcast receivers
+    //  */
+    // @Override
+    // public void onStop()
+    // {
+    //     super.onStop();
+    //     unregisterReceiver(eSimBroadcastReceiver);
+    //     // unregisterReceiver(resolutionReceiver);
+    // };
     // FUNCTIONS //
 
     // Initiate Manager
