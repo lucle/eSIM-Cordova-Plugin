@@ -25,7 +25,6 @@ public class EsimPlugin extends CordovaPlugin{
     // CONSTANTS //
     private static final String DOWNLOAD_ACTION = "download_subscription";
     private static final String START_RESOLUTION_ACTION = "start_resolution_action";
-    private static final String BROADCAST_PERMISSION = "com.starhub.aduat.torpedo.lpa.permission.BROADCAST";
 
     // eSIM Constants //
     private static final String HAS_ESIM_ENABLED = "hasEsimEnabled";
@@ -102,9 +101,7 @@ public class EsimPlugin extends CordovaPlugin{
                 }
             };
             context.registerReceiver(eSimBroadcastReceiver,
-                    new IntentFilter(DOWNLOAD_ACTION),
-                    BROADCAST_PERMISSION /* broadcastPermission*/,
-                    null /* handler */);
+                    new IntentFilter(DOWNLOAD_ACTION));
             // Download subscription asynchronously.
             activationCode = args.getString(0);
 
@@ -133,38 +130,6 @@ public class EsimPlugin extends CordovaPlugin{
         }    
         return true;
     }
-    //  /**
-    //  * Register the broadcast receivers
-    //  */
-    // @Override
-    // public void onStart()
-    // {
-    //     super.onStart();
-    //     registerReceiver(
-    //         eSimBroadcastReceiver,
-    //         DOWNLOAD_ACTION,
-    //         BROADCAST_PERMISSION,
-    //         null
-    //     );
-    //     // registerReceiver(
-    //     //     resolutionReceiver,
-    //     //     START_RESOLUTION_ACTION,
-    //     //     BROADCAST_PERMISSION,
-    //     //     null
-    //     // );
-    // };
-
-    // /**
-    //  * Un-Register the broadcast receivers
-    //  */
-    // @Override
-    // public void onStop()
-    // {
-    //     super.onStop();
-    //     unregisterReceiver(eSimBroadcastReceiver);
-    //     // unregisterReceiver(resolutionReceiver);
-    // };
-    // FUNCTIONS //
 
     // Initiate Manager
     private void initMgr() {
